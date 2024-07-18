@@ -8,13 +8,13 @@ const Main = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const variants = {
-    open: { opacity: 1, x: 0 },
-    closed: { opacity: 0, x: "-100%" },
+    open: { opacity: 1, x: 0, transition: { duration: 0.3 } },
+    closed: { opacity: 0, x: "-100%", transition: { duration: 0.3 } },
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center">
-      <nav className="w-full flex justify-between items-center p-4">
+    <div className={`min-h-screen bg-black text-white flex flex-col items-center ${isOpen ? '' : 'pt-4'}`}>
+      <nav className="w-full flex justify-between items-center px-4 py-2 lg:py-4">
         <div className="flex items-center space-x-4">
           <span className="text-xl font-bold">FarmaRide</span>
           <div className="lg:hidden">
@@ -48,23 +48,26 @@ const Main = () => {
           <button className="bg-white text-black px-4 py-2 rounded-full">Sign up</button>
         </div>
       </nav>
-      <motion.div
-        animate={isOpen ? "open" : "closed"}
-        variants={variants}
-        className="lg:hidden w-full flex flex-col items-center space-y-4"
-      >
-        <a href="#" className={NAV_LINK_CLASSES}>Ride</a>
-        <a href="#" className={NAV_LINK_CLASSES}>Drive</a>
-        <a href="#" className={NAV_LINK_CLASSES}>Business</a>
-        <a href="#" className={NAV_LINK_CLASSES}>Uber Eats</a>
-        <a href="#" className={NAV_LINK_CLASSES}>About</a>
-        <a href="#" className={NAV_LINK_CLASSES}>EN</a>
-        <a href="#" className={NAV_LINK_CLASSES}>Help</a>
-        <a href="/login-register" className={NAV_LINK_CLASSES}>Log in</a>
-        <button className="bg-white text-black px-4 py-2 rounded-full">Sign up</button>
-      </motion.div>
+      {isOpen && (
+        <motion.div
+          animate={isOpen ? "open" : "closed"}
+          variants={variants}
+          className="lg:hidden w-full flex flex-col items-center space-y-4"
+        >
+          <a href="#" className={NAV_LINK_CLASSES}>Ride</a>
+          <a href="#" className={NAV_LINK_CLASSES}>Drive</a>
+          <a href="#" className={NAV_LINK_CLASSES}>Business</a>
+          <a href="#" className={NAV_LINK_CLASSES}>Uber Eats</a>
+          <a href="#" className={NAV_LINK_CLASSES}>About</a>
+          <a href="#" className={NAV_LINK_CLASSES}>EN</a>
+          <a href="#" className={NAV_LINK_CLASSES}>Help</a>
+          <a href="/login-register" className={NAV_LINK_CLASSES}>Log in</a>
+          <button className="bg-white text-black px-4 py-2 rounded-full">Sign up</button>
+        </motion.div>
+      )}
 
-      <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between w-full px-8 py-16 lg:py-32">
+
+      <div className={`flex flex-col lg:flex-row items-center justify-center lg:justify-between w-full px-8 mt-8 lg:mt-16`}>
         <div className="text-center lg:text-left lg:max-w-md">
           <h1 className="text-4xl lg:text-5xl font-bold mb-4">Go anywhere with Uber</h1>
           <p className="text-lg mb-8">Request a ride, hop in, and go.</p>

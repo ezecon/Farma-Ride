@@ -7,7 +7,7 @@ export default function HeroSection() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
         <div className={`flex flex-col lg:flex-row items-center justify-center lg:justify-between w-full lg:px-36 mt-8 lg:mt-16`}>
-        <div className="text-center lg:text-left lg:max-w-md lg:pl-24 sm:px-4 montserrat-alternates-thin">
+        <div className="w-1/2 text-center lg:text-left lg:max-w-md lg:pl-24 sm:px-4 montserrat-alternates-thin">
           <h1 className="text-4xl lg:text-5xl font-bold mb-4">Order medicne from anywhere with FarmaRider</h1>
           <p className="text-lg mb-8">Request a order, hop in, and get.</p>
           <div className="space-y-4">
@@ -19,8 +19,8 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="mt-8 lg:mt-0 lg:ml-16 lg:pr-24">
-          <img src="https://medlineplus.gov/images/Medicines_share.jpg" alt="Illustration of people getting into an Uber" className=" w-[30rem] rounded-lg shadow-lg" />
+        <div className="w-1/2 mt-8 lg:mt-0 lg:ml-16 lg:pr-24">
+          <img src="https://medlineplus.gov/images/Medicines_share.jpg" alt="Illustration " className=" w-full rounded-lg shadow-lg" />
         </div>
       </div>
     </div>

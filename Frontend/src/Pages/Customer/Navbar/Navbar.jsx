@@ -54,7 +54,7 @@ export default function Navbar() {
                               <Link to="/profile"><MenuItem>Profile</MenuItem></Link>
                               <Link to="/dashboard"><MenuItem>Dashboard</MenuItem></Link>
                               <MenuItem>Logout</MenuItem>
-                            </MenuList>
+                            </MenuList>  
                     </Menu>
                 </div>
               </li>

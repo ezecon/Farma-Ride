@@ -162,6 +162,19 @@
 	color: rgb(255, 255, 255);
 	animation: anime 4s ease-in-out infinite;
   }
+  .water-text h1 {
+	position: absolute;
+	transform: translateX(-50%);
+	left: 50%;
+  }
+  .water-text h1:nth-child(1) {
+	color: transparent;
+	-webkit-text-stroke: 1px rgb(0, 0, 0);
+  }
+  .water-text h1:nth-child(2) {
+	color: rgb(0, 0, 0);
+	animation: anime 4s ease-in-out infinite;
+  }
   @keyframes anime {
 	0%,
 	100% {

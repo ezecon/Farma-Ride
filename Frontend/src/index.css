@@ -110,3 +110,331 @@
     font-style: italic;
   }
   
+
+.animated img {    
+	clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);    
+	animation: border-transform 10s linear infinite alternate forwards;    
+	border-radius: 100%;
+}
+
+.animated-text{
+	line-height: 1;
+	font-size: "Playwrite CL";
+	background-clip: text;
+	--webkit-baclground-clip: text;
+	color: transparent;
+	background-image: linear-gradient(45deg, rgb(88, 88, 88), blue, rgb(88, 88, 88));
+	background-size: 400% 400%;
+	animation: animate 5s ease infinite;
+}
+@keyframes animate{
+	0%{
+		background-position: 0 0;
+	}
+	25%{
+		background-position: 100% 0;
+	}
+	50%{
+		background-position: 100% 100%;
+	}
+	75%{
+		background-position: 0 100%;
+	}
+	100%{
+		background-position: 0 0;
+	}
+}
+
+.water-text {
+	position: relative;
+	
+  }
+  .water-text h2 {
+	position: absolute;
+	transform: translateX(-50%);
+	left: 50%;
+  }
+  .water-text h2:nth-child(1) {
+	color: transparent;
+	-webkit-text-stroke: 1px rgb(255, 255, 255);
+  }
+  .water-text h2:nth-child(2) {
+	color: rgb(255, 255, 255);
+	animation: anime 4s ease-in-out infinite;
+  }
+  @keyframes anime {
+	0%,
+	100% {
+	  clip-path: polygon(
+		0% 45%, 15% 44%, 32% 50%, 54% 60%, 70% 61%, 84% 59%, 100% 52%, 100% 100%, 0% 100%
+	  );
+	}
+	50% {
+	  clip-path: polygon(
+		0% 60%, 16% 65%, 34% 66%, 51% 62%, 67% 50%, 84% 45%, 100% 46%, 100% 100%, 0% 100%
+	  );
+	}
+  }
+  .blur-img {
+	filter: blur(5px);
+  }
+  
+  
+/* Keyframes for the border-radius transformation */
+@keyframes border-transform {    
+	0%, 100% {        
+		border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;    
+	}    
+	14% {        
+		border-radius: 40% 60% 54% 46% / 49% 60% 40% 51%;    
+	}    
+	28% {        
+		border-radius: 54% 46% 38% 62% / 49% 70% 30% 51%;    
+	}    
+	42% {        
+		border-radius: 61% 39% 55% 45% / 61% 38% 62% 39%;    
+	}    
+	56% {        
+		border-radius: 61% 39% 67% 33% / 70% 50% 50% 30%;    
+	}    
+	70% {        
+		border-radius: 50% 50% 34% 66% / 56% 68% 32% 44%;    
+	}    
+	84% {        
+		border-radius: 46% 54% 50% 50% / 35% 61% 39% 65%;    
+	}
+}
+
+/* Sticky header background color */
+[data-scroll-listener="true"] #sinatra-header-inner {    
+	background: rgba(0, 0, 0, 0.6);
+}
+
+/* styles.css */
+
+.playwrite-cl-title {
+    font-family: "Playwrite CL", cursive;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+  }
+  
+  .roboto-condensed-heading {
+    font-family: "Roboto Condensed", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+  .playwrite-pe-subtitle {
+    font-family: "Playwrite PE", cursive;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+  }
+  
+  .playwrite-cu-caption {
+    font-family: "Playwrite CU", cursive;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+  }
+  
+  /* Adjusted .cta styles for responsiveness */
+.cta {
+	display: inline-block;
+	padding: 10px 24px; /* Increased padding for better touchability */
+	color: white;
+	background-color: rgb(88, 88, 88);
+	border: 2px solid rgb(88, 88, 88);
+	font-size: 1.5rem; /* Adjusted font size for smaller screens */
+	text-transform: uppercase;
+	letter-spacing: 0.1rem;
+	margin-top: 20px; /* Reduced margin-top for better alignment */
+	transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .cta:hover {
+	color: rgb(88, 88, 88);
+	background-color: transparent;
+  }
+  /* Adjusted overlay to cover entire section */
+#hero::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	opacity: 0.7;
+	z-index: -1;
+  }
+  
+  /* Adjusted .hero container for responsive content */
+  #hero .hero {
+	max-width: 100%; /* Full width on smaller screens */
+	margin: 0 auto;
+	padding: 0 20px; /* Reduced padding for smaller screens */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  /* Adjusted text sizes for responsiveness */
+  #hero h1 {
+	display: block;
+	width: fit-content;
+	position: relative;
+	color: transparent;
+	animation: text_reveal 0.5s ease forwards;
+	animation-delay: 1s;
+  }
+  
+  /* Adjusted text reveal animations */
+  #hero h1:nth-child(1) {
+	animation-delay: 1s;
+  }
+  
+  #hero h1:nth-child(2) {
+	animation-delay: 2s;
+  }
+  
+  #hero h1:nth-child(3) {
+	animation: text_reveal_name 0.5s ease forwards;
+	animation-delay: 3s;
+  }
+  
+  /* Adjusted span animations */
+  #hero h1 span {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 0;
+	background-color: rgb(255, 255, 255);
+	animation: text_reveal_box 1s ease;
+	animation-delay: 0.5s;
+  }
+  
+  #hero h1:nth-child(1) span {
+	animation-delay: 0.5s;
+  }
+  
+  #hero h1:nth-child(2) span {
+	animation-delay: 1.5s;
+  }
+  
+  #hero h1:nth-child(3) span {
+	animation-delay: 2.5s;
+  }
+  
+  /* End Keyframes */
+  @keyframes text_reveal_box {
+	50% {
+	  width: 100%;
+	  left: 0;
+	}
+	100% {
+	  width: 0;
+	  left: 100%;
+	}
+  }
+  
+  @keyframes text_reveal {
+	100% {
+	  color: rgb(255, 255, 255);
+	}
+  }
+  
+  @keyframes text_reveal_name {
+	100% {
+	  color: rgb(255, 255, 255);
+	}
+  }
+  
+  
+
+/* CSS animation */
+@keyframes rotate {
+	0% {
+	  transform: rotateY(0deg);
+	}
+	50% {
+	  transform: rotateY(360deg);
+	}
+	100% {
+	  transform: rotateY(360deg);
+	}
+  }
+  
+  /* Apply animation to each character */
+  #rotating-text {
+	display: inline-block;
+  }
+  
+  #rotating-text span {
+	display: inline-block;
+	animation: rotate 2s infinite linear;
+	animation-delay: calc(0.01s * var(--index));
+  }
+  #rotating-text1 {
+	display: inline-block;
+  }
+  
+  #rotating-text1 span {
+	display: inline-block;
+	animation: rotate 2s infinite linear;
+	animation-delay: calc(0.01s * var(--index));
+  }
+  #rotating-text9 {
+	display: inline-block;
+  }
+  
+  #rotating-text9 span {
+	display: inline-block;
+	animation: rotate 2s infinite linear;
+	animation-delay: calc(0.01s * var(--index));
+  }
+  #rotating-text13 {
+	display: inline-block;
+  }
+  
+  #rotating-text13 span {
+	display: inline-block;
+	animation: rotate 2s infinite linear;
+	animation-delay: calc(0.01s * var(--index));
+  }
+  /*-------------------------------------------*/
+  /* CSS animation */
+@keyframes rotatex {
+	0% {
+	  transform: rotateX(0deg);
+	}
+	50% {
+	  transform: rotateX(360deg);
+	}
+	100% {
+	  transform: rotateX(360deg);
+	}
+  }
+  
+  /* Apply animation to each character */
+  #rotating-p {
+	display: inline-block;
+  }
+  
+  #rotating-p span {
+	display: inline-block;
+	animation: rotatex 1s infinite linear;
+	animation-delay: calc(0.001s * var(--index));
+  }
+  #rotating-p2 {
+	display: inline-block;
+  }
+  
+  #rotating-p2 span {
+	display: inline-block;
+	animation: rotatex 1s infinite linear;
+	animation-delay: calc(0.001s * var(--index));
+  }

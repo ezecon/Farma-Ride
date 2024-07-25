@@ -26,12 +26,14 @@ export default function Register() {
     };
   }, [currentIndex]);
 
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     // Add form submission logic here
   };
 
-
+/*
   //handling address collection
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
@@ -54,19 +56,20 @@ export default function Register() {
       // Handle unsupported geolocation
     }
   };
-
+  <div>
+  <Button className="bg-black px-2 w-full" onClick={captureLocation}>Share My Location</Button>
+  {latitude !== null && longitude !== null && (
+    <div>
+        <p className="text-sm text-white">Shared!</p>
+    </div>
+    )}
+</div>
+*/
 
 
 
   return (
-    <div className="relative min-h-screen bg-gray-100 montserrat-alternates-regular">
-      {/* Background Image */}
-      <img
-        src="https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg?t=st=1721279869~exp=1721283469~hmac=e4343b5081d11859028d62ecbec877b7ec70fcc2b39e555358b9d65e17eaed2a&w=996"
-        alt="Background"
-        className="absolute inset-0 w-full h-full object-cover blur-sm"
-      />
-
+    <div className="relative min-h-screen bg-black montserrat-alternates-regular">
       <div className="relative flex flex-col items-center justify-center p-4 pt-36">
         <div className="text-center text-2xl font-bold text-white mb-8 flex">
           <p>_</p> {visible && <span>{texts[currentIndex]}</span>} <p>_</p>
@@ -83,16 +86,6 @@ export default function Register() {
                 placeholder="Enter Name" 
                 className="w-full p-3 border border-gray-300 rounded-lg bg-transparent text-white placeholder-gray-400"
                 aria-label="Name"
-              />
-            </div>
-            <div>
-              <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-200">Username</label>
-              <input 
-                type="text" 
-                id="username"
-                placeholder="Enter Username" 
-                className="w-full p-3 border border-gray-300 rounded-lg bg-transparent text-white placeholder-gray-400"
-                aria-label="Username"
               />
             </div>
             <div>
@@ -115,14 +108,7 @@ export default function Register() {
                 aria-label="Number"
               />
             </div>
-            <div>
-              <Button className="bg-black px-2 w-full" onClick={captureLocation}>Share My Location</Button>
-              {latitude !== null && longitude !== null && (
-                <div>
-                    <p className="text-sm text-white">Shared!</p>
-                </div>
-                )}
-            </div>
+           
             <div>
               <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-200">Password</label>
               <input 
@@ -144,18 +130,8 @@ export default function Register() {
               />
             </div>
 
-            <div>
-              <label htmlFor="photo" className="block mb-2 text-sm font-medium text-gray-200">Photo</label>
-              <input 
-                type="file" 
-                id="photo"
-                placeholder="Enter Photo" 
-                className="w-full p-3 border border-gray-300 rounded-lg bg-transparent text-white placeholder-gray-400"
-                aria-label="Photo"
-              />
-            </div>
             <Button type="submit" className="w-full bg-black hover:bg-slate-900 text-white py-3 rounded-lg transition duration-300">
-              Login
+              Register
             </Button>
           </form>
         </div>

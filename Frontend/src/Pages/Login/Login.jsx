@@ -32,13 +32,7 @@ export default function Login() {
   };
 
   return (
-    <div className="relative min-h-screen bg-gray-100 montserrat-alternates-regular">
-      {/* Background Image */}
-      <img
-        src="https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg?t=st=1721279869~exp=1721283469~hmac=e4343b5081d11859028d62ecbec877b7ec70fcc2b39e555358b9d65e17eaed2a&w=996"
-        alt="Background"
-        className="absolute inset-0 w-full h-full object-cover blur-sm"
-      />
+    <div className="relative min-h-screen bg-black montserrat-alternates-regular">
 
       <div className="relative flex flex-col items-center justify-center p-4 pt-36">
         <div className="text-center text-2xl font-bold text-white mb-8 flex">

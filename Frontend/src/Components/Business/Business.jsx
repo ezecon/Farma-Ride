@@ -17,21 +17,21 @@ export default function Business(){
           <p className="text-black montserrat-alternates-extralight">
             Want to run your profession as a Rider? Big chance to save yourself and also the needy. So, why waiting?
           </p>
-          <Button className="bg-black px-2 rounded-2xl mt-2">Get Started</Button>
+          <a href="/role"><Button className="bg-black px-2 rounded-2xl mt-2">Get Started</Button></a>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row bg-white rounded-lg  w-full py-10 px-20">
+      <div className="flex flex-col  md:flex-row bg-white rounded-lg  w-full py-10 px-20">
         {/* Text Section */}
         <div className="p-4 sm:w-full">
           <p className="text-black montserrat-alternates-extralight">
             Want to run your business on online? Big chance to engage in the online world. Let's explore. So, why waiting?
           </p>
-          <Button className="bg-black px-2 rounded-2xl mt-2">Get Started</Button>
+          <a href="/role"><Button className="bg-black px-2 rounded-2xl mt-2">Get Started</Button></a>
         </div>
          {/* Image Section */}
          <div className="flex p-4 sm:w-full">
           <img 
-            src="https://as1.ftcdn.net/v2/jpg/02/96/07/78/1000_F_296077816_YOsoeDoxKH3VGXpu0SjweKoOpuudeW12.jpg" 
+            src="https://media.istockphoto.com/id/943974286/photo/hand-holding-medicine-capsule-pack.jpg?s=612x612&w=0&k=20&c=KMEtxYBqCrfMB0DBeBIqKrq17TDqxYjBClIHKQ88Ifw="
             alt="Sample Image" 
             className="w-full h-auto object-cover rounded-lg" 
           />

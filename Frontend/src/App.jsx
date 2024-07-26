@@ -7,6 +7,7 @@ import Index from './Pages/Customer/Index';
 import Index_Owner from './Pages/FarmacyOwner/Index';
 import Index_Rider from './Pages/Rider/Index';
 import Medicine from './Pages/Customer/Medicine/Medicine';
+import Verify from './Pages/Verify/Verify';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/rider" element={<Index_Rider/>} />
                     <Route path="/farmacy-owner" element={<Index_Owner/>} />
                     <Route path="/medicine" element={<Medicine/>} />
+                    <Route path="/verify" element={<Verify/>} />
                 </Routes>
             </div>
         </Router>

@@ -1,11 +1,17 @@
 import { Button } from "@material-tailwind/react";
+import axios from "axios";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const texts = ["Do you need medicine emergency?", "Are you free to ride?", "Hang on!", "Just Login"];
 
 export default function Login() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const showDuration = 1000; // 1 second for text to show
@@ -26,9 +32,33 @@ export default function Login() {
     };
   }, [currentIndex]);
 
-  const handleSubmit = (event) => {
+
+  //loggin
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Add form submission logic here
+    const user = {
+      email: email,
+      password: password, 
+    };
+    try {
+      const response = await axios.post('http://localhost:5000/api/users/login', user);
+      
+      if (response.data.error) {
+        toast.error(response.data.error); // Display error message
+      } else {
+        toast.success("Login successful!");
+        localStorage.setItem('token', response.data.token); 
+        console.log("Token:", response.data.token);
+          // Store token in local storage
+        navigate('/customer'); // Redirect to dashboard or any protected route
+      }
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        toast.error(error.response.data.error); // Display specific backend error message
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
+    }
   };
 
   return (
@@ -46,10 +76,12 @@ export default function Login() {
               <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-200">Username or Email</label>
               <input 
                 type="text" 
-                id="username"
-                placeholder="Enter Username or Email" 
+                id="email"
+                placeholder="Enter  Email" 
                 className="w-full p-3 border border-gray-300 rounded-lg bg-transparent text-white placeholder-gray-400"
-                aria-label="Username or Email"
+                aria-label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
@@ -60,6 +92,8 @@ export default function Login() {
                 placeholder="Enter Password" 
                 className="w-full p-3 border border-gray-300 rounded-lg bg-transparent text-white placeholder-gray-400"
                 aria-label="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <Button type="submit" className="w-full bg-black hover:bg-slate-900 text-white py-3 rounded-lg transition duration-300">

@@ -13,7 +13,7 @@ export default function Business(){
           />
         </div>
         {/* Text Section */}
-        <div className="p-4 sm:w-full">
+        <div className="p-4 sm:w-full flex flex-col justify-center">
           <p className="text-black montserrat-alternates-extralight">
             Want to run your profession as a Rider? Big chance to save yourself and also the needy. So, why waiting?
           </p>
@@ -22,7 +22,7 @@ export default function Business(){
       </div>
       <div className="flex flex-col  md:flex-row bg-white rounded-lg  w-full py-10 px-20">
         {/* Text Section */}
-        <div className="p-4 sm:w-full">
+        <div className="p-4 sm:w-full flex flex-col justify-center">
           <p className="text-black montserrat-alternates-extralight">
             Want to run your business on online? Big chance to engage in the online world. Let's explore. So, why waiting?
           </p>

@@ -1,85 +1,77 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
-const User = require('../models/User');
+const bcrypt = require('bcrypt');
 const router = express.Router();
+const User = require('../models/User');
 
-const sendVerificationEmail = async (user, req, res) => {
-    try {
-        const verificationCode = crypto.randomBytes(20).toString('hex');
-        user.verificationCode = verificationCode;
-        await user.save();
-
-        const transporter = nodemailer.createTransport({
-            service: 'Gmail',
-            auth: {
-                user: user.email,
-                pass: user.password
-            }
-        });
-
-        const mailOptions = {
-            from: 'your_email@gmail.com',
-            to: user.email,
-            subject: 'Email Verification',
-            text: `Your verification code is ${verificationCode}`
-        };
-
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error('Error sending email:', error);
-                return res.status(500).json({ error: error.toString() });
-            }
-            res.status(200).json({ message: 'Verification email sent' });
-        });
-    } catch (err) {
-        console.error('Error in sendVerificationEmail:', err);
-        res.status(500).json({ error: 'Failed to send verification email' });
-    }
-};
-
+// Create a user
 router.post('/register', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, number, verificationCode } = req.body;
+
     try {
-        let user = await User.findOne({ email });
-        if (user) {
-            return res.status(400).json({ message: 'User already exists' });
+        // Check for existing user with the same email
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Email already in use' });
         }
 
-        user = new User({ name, email, password });
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
+        // Create a new user
+        const user = new User({
+            name,
+            email,
+            password: hashedPassword,
+            number,
+            verificationCode,
+            isVerified: false // Add this if it's part of your schema
+        });
 
-        await user.save();
-
-        sendVerificationEmail(user, req, res);
+        const newUser = await user.save();
+        res.status(201).json(newUser);
     } catch (err) {
-        console.error('Error registering user:', err.message);
-        res.status(500).json({ error: 'Server error during registration' });
+        res.status(400).json({ message: err.message });
     }
 });
 
-router.post('/verify', async (req, res) => {
-    const { email, verificationCode } = req.body;
+// Get all users
+router.get('/', async (req, res) => {
     try {
-        let user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).json({ message: 'User not found' });
-        }
-
-        if (user.verificationCode !== verificationCode) {
-            return res.status(400).json({ message: 'Invalid verification code' });
-        }
-
-        user.isVerified = true;
-        user.verificationCode = null;
-        await user.save();
-        res.status(200).json({ message: 'Email verified successfully' });
+        const users = await User.find();
+        res.json(users);
     } catch (err) {
-        console.error('Error verifying email:', err.message);
-        res.status(500).json({ error: 'Server error during email verification' });
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Get user by email
+router.get('/verify', async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.query.email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Verify user by email
+router.put('/verify', async (req, res) => {
+    try {
+        const { userEmail } = req.body;
+        const user = await User.findOneAndUpdate(
+            { email: userEmail },
+            { isVerified: true },
+            { new: true }
+        );
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 });
 

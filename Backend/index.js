@@ -15,6 +15,7 @@ mongoose.connect('mongodb+srv://mdeconozzama:rboEBf8GIcHBkN0x@cluster0.efsb2yz.m
 }).then(() => console.log('MongoDB connected'))
 .catch(err => console.log(err));
 
-app.use('/api/users', require('./routes/users'));
+app.use('/api/users', require('./routes/users.js'));
+app.use('/api/users/login', require('./Verification/Auth.js'));
 
 app.listen(port, () => console.log(`Server running on port ${port}`));

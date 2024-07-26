@@ -9,8 +9,8 @@ export default function Navbar() {
 
   return (
     <div className='bg-[#ffffff] rounded-lg border border-black shadow-lg'>
-      <div className="flex  justify-between px-4 py-2">
-          <div className="flex-1 water-text py-2">
+      <div className="flex  justify-between px-6 py-2">
+          <div className="flex-1 water-text  py-2">
               <h1 className="font-bold sm:text-lg md:text-xl text-white">FARMA-RIDE</h1>
               <h1 className="font-bold sm:text-lg md:text-xl text-white">FARMA-RIDE</h1>
             </div>

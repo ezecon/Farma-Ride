@@ -15,8 +15,8 @@ export default function Verify() {
     
         if (verificationCode === code) {
             try {
-                const userEmail = { email: "md.econozzaman@gmail.com" }; 
-                const response = await axios.put('http://localhost:5000/api/users/verify', {userEmail});
+                const userEmail = "md.econozzaman@gmail.com"; // Use string directly
+                const response = await axios.put('http://localhost:5000/api/users/verify', { email: userEmail });
     
                 if (response.data.error) {
                     toast.error(response.data.error);
@@ -36,13 +36,14 @@ export default function Verify() {
             toast.error("Wrong Code");
         }
     };
+    
 
     useEffect(() => {
         const fetch = async () => {
-            const userEmail = "md.econozzaman@gmail.com"; // Just the email as a string
+            const userEmail = "md.econozzaman@gmail.com"; // Use string directly
             try {
                 const response = await axios.get('http://localhost:5000/api/users/verify', {
-                    params: { email: userEmail }
+                    params: { email: userEmail } // Correct parameter usage
                 });
                 if (response.status === 200) {
                     console.log("data fetched");
@@ -62,6 +63,7 @@ export default function Verify() {
             fetch();
         }
     }, [state, navigate]);
+    
     
 
     return (

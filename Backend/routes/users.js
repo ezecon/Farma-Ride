@@ -45,16 +45,17 @@ router.get('/', async (req, res) => {
 });
 
 // Get user by email
-router.get('/verify', async (req, res) => {
+router.get('/verify/:userEmail', async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.query.email });
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+        const item = await reservation.find({ email: req.params.userEmail });
+        if (item) {
+          res.status(200).json(item);
+        } else {
+          res.status(404).json({ message: 'Item not found' });
         }
-        res.status(200).json(user);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+      } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+      }
 });
 
 // Verify user by email
@@ -76,3 +77,4 @@ router.put('/verify', async (req, res) => {
 });
 
 module.exports = router;
+ 

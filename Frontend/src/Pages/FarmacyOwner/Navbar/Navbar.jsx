@@ -7,22 +7,20 @@ export default function Navbar() {
 
   return (
     <div className='bg-[#ffffff] rounded-lg border border-black shadow-lg'>
-      <div className="flex  justify-between px-4 py-2">
-          <div className="flex-1 water-text py-2">
-              <h1 className="font-bold sm:text-lg md:text-xl text-white">FARMA-RIDE</h1>
-              <h1 className="font-bold sm:text-lg md:text-xl text-white">FARMA-RIDE</h1>
+      <div className="navbar flex  justify-between px-4 py-2">
+          <div className="flex-1 water-text py-4">
+              <h1 className="font-bold sm:text-lg md:text-2xl text-white">FARMA-RIDE</h1>
+              <h1 className="font-bold sm:text-lg md:text-2xl text-white">FARMA-RIDE</h1>
             </div>
-          <div className="">
+          <div className="hidden md:flex  lg:pt-2">
             <ul className="flex space-x-6 pt-2">
               <li>
-                <a className="text-Black hover:underline hover:underline-offset-4" href="/medicine">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDxXRE1HkZbxzU9b2T_6nNfjIJ8xtA5ecGZQ&s"
-                  className='w-10 pr-4'
-                  alt="" />
+                <a className="text-[#000000] hover:underline hover:underline-offset-4 font-mono" href="/medicine">
+                  Buy Now
                 </a>
               </li>
               <li>
-                <div className="flex items-center gap-x-1 ">
+                <div className="flex items-center gap-x-1">
                       <Menu>
                             <MenuHandler>
                             <img
@@ -32,9 +30,9 @@ export default function Navbar() {
                                   />
                             </MenuHandler>
                             <MenuList>
-                              <Link to="/profile"><MenuItem className='font-mono'>Profile</MenuItem></Link>
-                              <Link to="/dashboard"><MenuItem className='font-mono'>Dashboard</MenuItem></Link>
-                              <MenuItem className='font-mono'>Logout</MenuItem>
+                              <Link to="/profile"><MenuItem>Profile</MenuItem></Link>
+                              <Link to="/dashboard"><MenuItem>Dashboard</MenuItem></Link>
+                              <MenuItem>Logout</MenuItem>
                             </MenuList>  
                     </Menu>
                 </div>

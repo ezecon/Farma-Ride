@@ -165,7 +165,7 @@
   .water-text h1 {
 	position: absolute;
 	transform: translateX(-50%);
-	left: 50%;
+	left: 10%;
   }
   .water-text h1:nth-child(1) {
 	color: transparent;

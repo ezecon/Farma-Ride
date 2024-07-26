@@ -1,6 +1,8 @@
 
 import { Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
 import { Link } from 'react-router-dom';
+import { GiShoppingCart } from "react-icons/gi";
+import { FaSearch } from "react-icons/fa";
 
 export default function Navbar() {
 
@@ -16,9 +18,12 @@ export default function Navbar() {
             <ul className="flex space-x-6 pt-2">
               <li>
                 <a className="text-Black hover:underline hover:underline-offset-4" href="/medicine">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDxXRE1HkZbxzU9b2T_6nNfjIJ8xtA5ecGZQ&s"
-                  className='w-10 pr-4'
-                  alt="" />
+                <FaSearch className='pr-4 text-4xl'/>
+                </a>
+              </li>
+              <li>
+                <a className="text-Black hover:underline hover:underline-offset-4" href="/medicine">
+                <GiShoppingCart className='pr-3 text-4xl'/>
                 </a>
               </li>
               <li>

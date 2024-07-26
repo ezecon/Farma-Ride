@@ -123,7 +123,7 @@
 	background-clip: text;
 	--webkit-baclground-clip: text;
 	color: transparent;
-	background-image: linear-gradient(45deg, rgb(88, 88, 88), blue, rgb(88, 88, 88));
+	background-image: linear-gradient(45deg, rgb(255, 255, 255), rgb(0, 0, 0), rgb(255, 255, 255), rgb(0, 0, 0), rgb(255, 255, 255), rgb(0, 0, 0));
 	background-size: 400% 400%;
 	animation: animate 5s ease infinite;
 }
@@ -189,7 +189,7 @@
 	}
   }
   .blur-img {
-	filter: blur(5px);
+	filter: blur(3px);
   }
   
   
@@ -451,3 +451,7 @@
 	animation: rotatex 1s infinite linear;
 	animation-delay: calc(0.001s * var(--index));
   }
+
+
+
+  

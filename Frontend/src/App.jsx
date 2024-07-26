@@ -4,6 +4,9 @@ import Login from './Pages/Login/Login';
 import Register from './Pages/Register/Register';
 import Role from './Pages/Role/Role';
 import Index from './Pages/Customer/Index';
+import Index_Owner from './Pages/FarmacyOwner/Index';
+import Index_Rider from './Pages/Rider/Index';
+import Medicine from './Pages/Customer/Medicine/Medicine';
 
 function App() {
     return (
@@ -14,7 +17,10 @@ function App() {
                     <Route path="/login" element={<Login/>} />
                     <Route path="/register" element={<Register/>} />
                     <Route path="/role" element={<Role/>} />
-                    <Route path="/Customer" element={<Index/>} />
+                    <Route path="/customer" element={<Index/>} />
+                    <Route path="/rider" element={<Index_Rider/>} />
+                    <Route path="/farmacy-owner" element={<Index_Owner/>} />
+                    <Route path="/medicine" element={<Medicine/>} />
                 </Routes>
             </div>
         </Router>

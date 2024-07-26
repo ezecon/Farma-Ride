@@ -4,7 +4,7 @@ export default function HeroSection() {
       <div >
           <div >
           <div className="relative h-full">
-              <img src="https://images.aeonmedia.co/images/afef287f-dd6f-4a6a-b8a6-4f0a09330657/sized-kendal-l4ikccachoc-unsplash.jpg?width=3840&quality=75&format=auto"
+              <img src="https://www.parcelandpostaltechnologyinternational.com/wp-content/uploads/2022/01/GEODIS-MyParcel-e1642607389310-1024x489.jpeg"
               className="h-full w-full object-cover object-center rounded-xl blur-img"
               alt="Hero Section Image" />
         </div>

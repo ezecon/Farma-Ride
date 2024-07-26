@@ -35,17 +35,17 @@ export default function Role() {
         </div>
 
       <div>
-      <a href="/login/Owner">
+      <a href="/farmacy-owner">
           <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
                 Join as Farmacy Owner
             </div>
       </a>
-       <a href="/login/Customer">
+       <a href="/customer">
         <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
               Join as Customer
           </div>
        </a>
-       <a href="/login/Rider">
+       <a href="/rider">
           <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
                 Join as Rider
             </div>

@@ -8,6 +8,7 @@ export default function Index() {
   return (
     <div className="lg:px-80">
         <Navbar/>
+        <HeroSection/>
         <Farmacy/>
         <Footer/>
     </div>

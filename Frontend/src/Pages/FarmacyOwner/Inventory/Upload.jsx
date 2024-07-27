@@ -30,7 +30,7 @@ export default function Upload() {
             className="h-full w-full object-cover object-center rounded-xl blur-img"
           />
         </div>
-
+    
       </Carousel>
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-left">

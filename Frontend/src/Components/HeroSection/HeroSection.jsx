@@ -1,7 +1,7 @@
 
 import { IoSearch } from "react-icons/io5";
 
-const INPUT_CLASSES = "w-full px-4 py-3 rounded-full bg-zinc-800 text-white placeholder-zinc-400 focus:outline-none";
+const INPUT_CLASSES = "w-full px-4 py-3 rounded-full bg-zinc-800 text-black placeholder-zinc-400 focus:outline-none";
 
 export default function HeroSection() {
   return (

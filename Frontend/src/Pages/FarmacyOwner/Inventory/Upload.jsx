@@ -25,7 +25,7 @@ export default function Upload() {
         </div>
         <div className=" h-full">
           <img
-            src="/1.jpg"
+            src="/1.jpg"  
             alt="image 1"
             className="h-full w-full object-cover object-center rounded-xl blur-img"
           />

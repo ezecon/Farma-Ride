@@ -30,6 +30,7 @@ function App() {
                     <Route path="/register" element={<Navigate to="/register/role" />} />
 
                     <Route path="/role" element={<Navigate to="/register/role" />} />
+                    <Route path="*" element={<Navigate to="/" />} />
 
                     <Route path="login/role" element={<Role isLogin />} />
                     <Route path="register/role" element={<Role isRegister />} />

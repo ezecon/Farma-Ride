@@ -62,7 +62,16 @@ const handleSignUp = (code) => {
   .catch((err) => {
     console.error('Failed to send email. Error:', err);
   });
-  navigate('/verify');
+  if(isCustomer){
+    navigate('/verify-customer');
+  }
+  else if(isRider){
+    navigate('/verify-rider');
+  }
+  else if(isOwner){
+    navigate('/verify-farmacy-owner');
+  }
+
 };
 const checkRole = ()=>{
   if(isCustomer){

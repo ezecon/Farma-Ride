@@ -1,7 +1,7 @@
 
 import { Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
 import { Link } from 'react-router-dom';
-import { LuUpload } from "react-icons/lu";
+import { FaBriefcaseMedical } from "react-icons/fa";
 import { IoMdNotifications  } from "react-icons/io";
 
 export default function Navbar() {
@@ -17,8 +17,8 @@ export default function Navbar() {
           <div className="">
             <ul className="flex space-x-6 pt-2">
               <li>
-                <a className="text-Black" href="/medicine">
-                    <LuUpload className='pr-4 text-4xl'/>
+                <a className="text-Black" href="/farmacy-owner/inventory">
+                    <FaBriefcaseMedical className='pr-4 text-4xl'/>
                 </a>
               </li>
               <li>

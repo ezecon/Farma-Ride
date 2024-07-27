@@ -8,6 +8,8 @@ import Index_Owner from './Pages/FarmacyOwner/Index';
 import Index_Rider from './Pages/Rider/Index';
 import Medicine from './Pages/Customer/Medicine/Medicine';
 import Verify from './Pages/Verify/Verify';
+import Information from './Pages/Information/Information';
+import Inventory from './Pages/FarmacyOwner/Inventory/Inventory';
 
 function App() {
     return (
@@ -36,7 +38,13 @@ function App() {
                     <Route path="/rider" element={<Index_Rider />} />
                     <Route path="/farmacy-owner" element={<Index_Owner />} />
                     <Route path="/medicine" element={<Medicine />} />
-                    <Route path="/verify" element={<Verify />} />
+                    <Route path="/verify-customer" element={<Verify isCustomer/>} />
+                    <Route path="/verify-rider" element={<Verify isRider/>} />
+                    <Route path="/verify-farmacy-owner" element={<Verify isOwner/>} />
+                    <Route path="/verify/information-customer" element={<Information isCustomer/>} />
+                    <Route path="/verify/information-rider" element={<Information isRider/>} />
+                    <Route path="/verify/information-farmacy-owner" element={<Information isOwner/>} />
+                    <Route path="/farmacy-owner/inventory" element={<Inventory/>} />
                 </Routes>
             </div>
         </Router>

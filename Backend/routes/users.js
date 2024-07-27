@@ -5,7 +5,7 @@ const User = require('../models/User');
 
 // Create a user
 router.post('/register', async (req, res) => {
-    const { name, email, password, number, verificationCode } = req.body;
+    const { name, email, password, number, role, verificationCode } = req.body;
 
     try {
         // Check for existing user with the same email
@@ -24,6 +24,7 @@ router.post('/register', async (req, res) => {
             password: hashedPassword,
             number,
             verificationCode,
+            role,
             isVerified: false // Add this if it's part of your schema
         });
 
@@ -45,25 +46,32 @@ router.get('/', async (req, res) => {
 });
 
 // Get user by email
-router.get('/verify/:userEmail', async (req, res) => {
+// Get user by email
+router.get('/verify', async (req, res) => {
     try {
-        const item = await reservation.find({ email: req.params.userEmail });
-        if (item) {
-          res.status(200).json(item);
+        const user = await User.findOne({ email: req.query.email }); // Use query parameter for email
+        if (user) {
+            res.status(200).json({
+                isVerified: user.isVerified,
+                verificationCode: user.verificationCode
+            });
         } else {
-          res.status(404).json({ message: 'Item not found' });
+            res.status(404).json({ message: 'User not found' });
         }
-      } catch (error) {
+    } catch (error) {
         res.status(500).json({ message: 'Server error', error });
-      }
+    }
 });
 
 // Verify user by email
 router.put('/verify', async (req, res) => {
     try {
-        const { userEmail } = req.body;
+        const { email } = req.body; // Correctly extract email from body
+        if (!email) {
+            return res.status(400).json({ message: 'Email is required' });
+        }
         const user = await User.findOneAndUpdate(
-            { email: userEmail },
+            { email },
             { isVerified: true },
             { new: true }
         );
@@ -75,6 +83,7 @@ router.put('/verify', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
 
 module.exports = router;
  

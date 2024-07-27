@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const texts = ["Do you need medicine emergency?", "Are you free to ride?", "Hang on!", "Just Register"];
 
-export default function Register() {
+export default function Register({isCustomer, isRider, isOwner}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visible, setVisible] = useState(true);
   const [name, setName] = useState('');
@@ -64,14 +64,30 @@ const handleSignUp = (code) => {
   });
   navigate('/verify');
 };
+const checkRole = ()=>{
+  if(isCustomer){
+    return 'customer';
+  }
+  else if(isRider){
+    return 'rider';
+  }
+  else if(isOwner){
+    return 'farmacy-owner'
+  }
+  else{
+    toast.error("Something wents wrong!")
+  }
+}
 const handleSubmit = async (event) => {
     event.preventDefault();
     const code = getRandomChoice();
+    const temp = checkRole();
     const newUser = {
       name: name,
       email: email,
       number:number,
       password: password,
+      role: temp,
       verificationCode: code,
     }; 
   

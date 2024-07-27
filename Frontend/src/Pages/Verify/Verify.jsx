@@ -58,6 +58,7 @@ export default function Verify() {
         };
     
         if (state === true) {
+            toast.success("Verification Complete")
             navigate('/customer/');
         } else {
             fetch();

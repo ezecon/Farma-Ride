@@ -1,9 +1,8 @@
-
 import { useEffect, useState } from "react";
 
 const texts = ["OH?", "Are you free?", "Hang on!", "Select Your Role!"];
 
-export default function Role() {
+export default function Role({ isLogin, isRegister }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -35,21 +34,35 @@ export default function Role() {
         </div>
 
       <div>
-      <a href="/farmacy-owner">
-          <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
+      {isLogin && 
+        <><a href="/farmacy-owner/login">
+              <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
                 Join as Farmacy Owner
-            </div>
-      </a>
-       <a href="/customer">
-        <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
-              Join as Customer
-          </div>
-       </a>
-       <a href="/rider">
-          <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
-                Join as Rider
-            </div>
-       </a>
+              </div>
+            </a><a href="/customer/login">
+                <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
+                  Join as Customer
+                </div>
+              </a><a href="/rider/login">
+                <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
+                  Join as Rider
+                </div>
+              </a></>
+        }
+      {isRegister && 
+      <><a href="/farmacy-owner/register">
+              <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
+                Join as Farmacy Owner
+              </div>
+            </a><a href="/customer/register">
+                <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
+                  Join as Customer
+                </div>
+              </a><a href="/rider/register">
+                <div className="mt-2 w-full max-w-md p-8 rounded-lg shadow-lg border text-white border-gray-700 bg-white bg-opacity-10">
+                  Join as Rider
+                </div>
+              </a></>}
         
       </div>
       </div>

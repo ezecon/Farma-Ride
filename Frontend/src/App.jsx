@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import Main from './Components/Main/Main';
 import Login from './Pages/Login/Login';
 import Register from './Pages/Register/Register';
@@ -14,15 +14,29 @@ function App() {
         <Router>
             <div className="App">
                 <Routes>
-                    <Route path="/" element={<Main/>} />
-                    <Route path="/login" element={<Login/>} />
-                    <Route path="/register" element={<Register/>} />
-                    <Route path="/role" element={<Role/>} />
-                    <Route path="/customer" element={<Index/>} />
-                    <Route path="/rider" element={<Index_Rider/>} />
-                    <Route path="/farmacy-owner" element={<Index_Owner/>} />
-                    <Route path="/medicine" element={<Medicine/>} />
-                    <Route path="/verify" element={<Verify/>} />
+                    <Route path="/" element={<Main />} />
+                    <Route path="customer/login" element={<Login isCustomer />} />
+                    <Route path="customer/register" element={<Register isCustomer/>} />
+
+                    <Route path="farmacy-owner/login" element={<Login isOwner/>} />
+                    <Route path="farmacy-owner/register" element={<Register isOwner />} />
+
+                    <Route path="rider/login" element={<Login isRider/>} />
+                    <Route path="rider/register" element={<Register isRider/>} />
+                    
+                    <Route path="/login" element={<Navigate to="/login/role" />} />
+                    <Route path="/register" element={<Navigate to="/register/role" />} />
+
+                    <Route path="/role" element={<Navigate to="/register/role" />} />
+
+                    <Route path="login/role" element={<Role isLogin />} />
+                    <Route path="register/role" element={<Role isRegister />} />
+                    
+                    <Route path="/customer" element={<Index />} />
+                    <Route path="/rider" element={<Index_Rider />} />
+                    <Route path="/farmacy-owner" element={<Index_Owner />} />
+                    <Route path="/medicine" element={<Medicine />} />
+                    <Route path="/verify" element={<Verify />} />
                 </Routes>
             </div>
         </Router>

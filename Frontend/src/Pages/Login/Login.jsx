@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const texts = ["Do you need medicine emergency?", "Are you free to ride?", "Hang on!", "Just Login"];
 
-export default function Login() {
+export default function Login({isCustomer, isRider, isOwner}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visible, setVisible] = useState(true);
   const [email, setEmail] = useState('');
@@ -50,7 +50,16 @@ export default function Login() {
         localStorage.setItem('token', response.data.token); 
         console.log("Token:", response.data.token);
           // Store token in local storage
-        navigate('/customer'); // Redirect to dashboard or any protected route
+          if(isCustomer){
+            navigate('/customer');
+          }
+          else if(isRider){
+            navigate('/rider');
+          }
+          else if(isOwner){
+            navigate('/farmacy-owner');
+          }
+        
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {

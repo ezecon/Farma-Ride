@@ -39,12 +39,12 @@ export default function Navbar() {
               </a>
             </li>
             <li>
-              <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="/role">
+              <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="login/role">
                 Login
               </a>
             </li>
             <li>
-              <a className="text-[#000000]  bg-white font-bold font-mono text-xl rounded-xl p-1 hover:bg-slate-800 hover:text-white" href="/role">
+              <a className="text-[#000000]  bg-white font-bold font-mono text-xl rounded-xl p-1 hover:bg-slate-800 hover:text-white" href="register/role">
                 Signup
               </a>
             </li>
@@ -70,10 +70,10 @@ export default function Navbar() {
           <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="/events" onClick={toggleMenu}>
             Events
           </a>
-          <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="/role" onClick={toggleMenu}>
+          <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="login/role" onClick={toggleMenu}>
             Login
           </a>
-          <a className="text-[#000000]  bg-white font-bold font-mono text-xl rounded-xl p-1 hover:bg-slate-800 hover:text-white" href="/role">
+          <a className="text-[#000000]  bg-white font-bold font-mono text-xl rounded-xl p-1 hover:bg-slate-800 hover:text-white" href="register/role" onClick={toggleMenu}>
                 Signup
               </a>
 

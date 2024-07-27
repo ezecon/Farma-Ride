@@ -16,11 +16,25 @@ export default function Upload() {
             className="h-full w-full object-cover object-center rounded-xl blur-img"
           />
         </div>
+        <div className=" h-full">
+          <img
+            src="/1.jpg"
+            alt="image 1"
+            className="h-full w-full object-cover object-center rounded-xl blur-img"
+          />
+        </div>
+        <div className=" h-full">
+          <img
+            src="/1.jpg"
+            alt="image 1"
+            className="h-full w-full object-cover object-center rounded-xl blur-img"
+          />
+        </div>
 
       </Carousel>
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-left">
-          <h1 onClick={() => setIsOpen(true)} className="cursor-pointer text-3xl font-mono border border-white rounded-xl p-4 bg-transparent font-bold text-white">Upload Medicine<span></span></h1>
+          <h1 onClick={() => setIsOpen(true)} className="animated-text  cursor-pointer sm:text-xl text-3xl font-mono border border-white rounded-xl p-4 bg-transparent font-bold text-white">Upload Medicine<span></span></h1>
 
         </div>
       </div>

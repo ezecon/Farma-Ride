@@ -7,7 +7,7 @@ export default function Inventory() {
     <div className="lg:px-80">
       <Navbar/>
       <Upload/>
-      <Upload/>
+      Your Inventory
     </div>
   )
 }

@@ -22,4 +22,7 @@ app.use('/api/users', require('./routes/users.js'));
 app.use('/api/users/login', require('./Verification/Auth.js'));
 app.use('/api/medicines', require('./routes/medicines.js'));
 
+const verify = require('./Verification/verifytoken.js');
+app.use('/api/verifyToken', verify);
+
 app.listen(port, () => console.log(`Server running on port ${port}`));

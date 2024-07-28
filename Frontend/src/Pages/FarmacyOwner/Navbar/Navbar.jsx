@@ -1,12 +1,13 @@
 
 import { Button, Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaBriefcaseMedical } from "react-icons/fa";
 import { IoMdNotifications  } from "react-icons/io";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { useToken } from '../../../Components/Hook/useToken';
 
 export default function Navbar() {
   let [isOpen, setIsOpen] = useState(false)
@@ -15,6 +16,50 @@ export default function Navbar() {
   const [price, setPrice] = useState('');
   const [status, setStatus] = useState('');
   const [file, setFile] = useState(null);
+  const { token, removeToken } = useToken();
+  const navigate = useNavigate();
+  const [userID, setUserID] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+
+        if (response.status === 200 && response.data.valid) {
+          setUserID(response.data.decoded.id);
+          console.log(response.data.decoded.id)
+
+        } else {
+          console.log("Token verification failed:", response.data);
+          removeToken();
+        }
+      } catch (error) {
+        console.error('Error verifying token:', error);
+        removeToken();
+      }
+    };
+
+    verifyToken();
+  }, [token, navigate, removeToken]);
+
+  useEffect(() => {
+    if (!userID) return;
+
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
+        if (response.status === 200) {
+          setUserInfo(response.data);
+        } else {
+          console.log(response.data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUserInfo();
+  }, [userID]);
 
   const handleAdd = async (e) => {
     e.preventDefault();
@@ -66,7 +111,7 @@ export default function Navbar() {
                       <Menu>
                             <MenuHandler>
                             <img
-                                  src='https://avatars.githubusercontent.com/u/92664558?v=4'
+                                  src={`http://localhost:5000/uploads/file-1722147007192.jpg`}
                                     alt="avatar"
                                     className="rounded-full w-10 border border-red-500"
                                   />

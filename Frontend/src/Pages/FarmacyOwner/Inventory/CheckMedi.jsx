@@ -38,15 +38,14 @@ export default function CheckMedi() {
             middleLineColor=""
             lastLineColor=""
           />
-          <p className="mt-5 text-lg font-semibold text-gray-700">Loading, please wait...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col justify-center items-center px-10 py-20">
-      <div className="lg:w-1/2 border border-[#dbdada] pl-5  shadow-lg rounded-lg flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center px-10 py-20 bg-black min-h-screen">
+      <div className=" bg-white lg:w-1/2 border border-[#dbdada] pl-5  shadow-lg rounded-lg flex flex-col justify-center items-center py-10">
         {medicine.filename && (
             <img 
               src={`http://localhost:5000/uploads/${medicine.filename}`} 
@@ -54,12 +53,10 @@ export default function CheckMedi() {
               className="p-5 mt-10 shadow rounded-lg"
             />
           )}
-        <div>
-          <p className="pt-5 font-bold text-center lg:text-left text-2xl text-gray-800 montserrat-alternates-regular">{medicine.medicineName}</p>
-          <p className="mt-4 text-sm text-gray-700">{medicine.description}</p>
-          <p className="mt-4 text-sm font-semibold text-[goldenrod]">Price: <span className="text-crimson">৳{medicine.price}</span></p>
-          {/*<p className="mt-4 text-lg text-gray-700">Status: {if(medicine.status==="Available") ? <span className='text-green-600'>{medicine.status}</span> : <span className='text-red-600'>{medicine.status}</span> }</p>*/}
-        </div>
+        <p className="pt-5 font-bold text-center lg:text-left text-2xl text-gray-800 montserrat-alternates-regular">{medicine.medicineName}</p>
+        <p className="mt-4 text-sm text-gray-700">{medicine.description}</p>
+        <p className="mt-4 text-sm font-semibold text-[goldenrod]">Price: <span className="text-crimson">৳{medicine.price}</span></p>
+        {/*<p className="mt-4 text-lg text-gray-700">Status: {if(medicine.status==="Available") ? <span className='text-green-600'>{medicine.status}</span> : <span className='text-red-600'>{medicine.status}</span> }</p>*/}
       </div>
     </div>
   );

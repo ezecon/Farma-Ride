@@ -21,9 +21,9 @@ export default function Medicines() {
   }, []);
 
   return (
-    <div>
+    <div className="my-10">
       <h1 className="animated-text text-center p-10 font-bold montserrat-alternates-black text-3xl">Your Inventory</h1>
-    <div className="grid grid-cols-4 gap-3 px-5">
+    <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 px-5">
             {data.reverse().map((item) => (
                 <MedicineCard key={item._id} data={item} />
             ))}

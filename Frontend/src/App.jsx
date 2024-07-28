@@ -9,7 +9,6 @@ import Index_Rider from './Pages/Rider/Index';
 import Medicine from './Pages/Customer/Medicine/Medicine';
 import Verify from './Pages/Verify/Verify';
 import Information from './Pages/Information/Information';
-import Inventory from './Pages/FarmacyOwner/Inventory/Inventory';
 import Email from './Pages/Email';
 import CheckMedi from './Pages/FarmacyOwner/Inventory/CheckMedi';
 
@@ -51,7 +50,7 @@ function App() {
                     <Route path="/verify/information-customer" element={<Information isCustomer/>} />
                     <Route path="/verify/information-rider" element={<Information isRider/>} />
                     <Route path="/verify/information-farmacy-owner" element={<Information isOwner/>} />
-                    <Route path="/farmacy-owner/inventory" element={<Inventory/>} />
+
                 </Routes>
             </div>
         </Router>

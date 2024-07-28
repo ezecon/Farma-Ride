@@ -10,6 +10,8 @@ import Medicine from './Pages/Customer/Medicine/Medicine';
 import Verify from './Pages/Verify/Verify';
 import Information from './Pages/Information/Information';
 import Inventory from './Pages/FarmacyOwner/Inventory/Inventory';
+import Email from './Pages/Email';
+import CheckMedi from './Pages/FarmacyOwner/Inventory/CheckMedi';
 
 function App() {
     return (
@@ -17,6 +19,7 @@ function App() {
             <div className="App">
                 <Routes>
                     <Route path="/" element={<Main />} />
+                    <Route path="/email" element={<Email />} />
                     <Route path="customer/login" element={<Login isCustomer />} />
                     <Route path="customer/register" element={<Register isCustomer/>} />
 
@@ -35,6 +38,9 @@ function App() {
                     <Route path="login/role" element={<Role isLogin />} />
                     <Route path="register/role" element={<Role isRegister />} />
                     
+                    <Route path="/farmacy-owner/check-medicine/:id" element={<CheckMedi />} />
+
+
                     <Route path="/customer" element={<Index />} />
                     <Route path="/rider" element={<Index_Rider />} />
                     <Route path="/farmacy-owner" element={<Index_Owner />} />

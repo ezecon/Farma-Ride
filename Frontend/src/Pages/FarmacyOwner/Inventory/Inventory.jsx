@@ -1,4 +1,6 @@
+
 import Navbar from "../Navbar/Navbar";
+import Medicines from "./Medicines/Medicines";
 import Upload from "./Upload";
 
 export default function Inventory() {
@@ -7,7 +9,7 @@ export default function Inventory() {
     <div className="lg:px-80">
       <Navbar/>
       <Upload/>
-      Your Inventory
+       <Medicines/>
     </div>
   )
 }

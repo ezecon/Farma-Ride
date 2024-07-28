@@ -2,20 +2,21 @@ import { Button } from "@material-tailwind/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Verify({isCustomer, isRider, isOwner}) {
     const [verificationCode, setVerificationCode] = useState('');
     const [state, setState] = useState(null);
     const [code, setCode] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
+    const { userEmail } = location.state || {};
 
     const handleSubmit = async (event) => {
         event.preventDefault();
     
         if (verificationCode === code) {
             try {
-                const userEmail = "hypnotoxinofficial@gmail.com"; // Use string directly
                 const response = await axios.put('http://localhost:5000/api/users/verify', { email: userEmail });
     
                 if (response.data.error) {
@@ -39,7 +40,6 @@ export default function Verify({isCustomer, isRider, isOwner}) {
 
     useEffect(() => {
         const fetch = async () => {
-            const userEmail = "hypnotoxinofficial@gmail.com"; // Use string directly
             try {
                 const response = await axios.get('http://localhost:5000/api/users/verify', {
                     params: { email: userEmail } // Correct parameter usage

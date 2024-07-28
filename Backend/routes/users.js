@@ -44,17 +44,20 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
-// Get all users by id
+
+// Get user by ID
 router.get('/:id', async (req, res) => {
     try {
-        const users = await User.findById(req.params.id);
-        res.json(users);
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json(user);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
 
-// Get user by email
 // Get user by email
 router.get('/verify', async (req, res) => {
     try {
@@ -93,22 +96,21 @@ router.put('/verify', async (req, res) => {
     }
 });
 
+// Delete user by email
 router.delete('/delete', async (req, res) => {
     const { email } = req.body;
-  
-    try {
-      const user = await User.findOneAndDelete({ email });
-  
-      if (user) {
-        res.status(200).json({ message: 'User deleted successfully' });
-      } else {
-        res.status(404).json({ message: 'User not found' });
-      }
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  });
 
+    try {
+        const user = await User.findOneAndDelete({ email });
+
+        if (user) {
+            res.status(200).json({ message: 'User deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 module.exports = router;
- 

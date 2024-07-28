@@ -63,13 +63,19 @@ const handleSignUp = (code) => {
     console.error('Failed to send email. Error:', err);
   });
   if(isCustomer){
-    navigate('/verify-customer');
+    navigate('/verify-customer', {
+      state: { userEmail: email }
+    });
   }
   else if(isRider){
-    navigate('/verify-rider');
+    navigate('/verify-rider', {
+      state: { userEmail: email }
+    });
   }
   else if(isOwner){
-    navigate('/verify-farmacy-owner');
+    navigate('/verify-farmacy-owner', {
+      state: { userEmail: email }
+    });
   }
 
 };

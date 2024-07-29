@@ -1,5 +1,5 @@
 
-import { Avatar, Button, Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
+import { Avatar, Badge, Button, Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBriefcaseMedical } from "react-icons/fa";
 import { IoMdNotifications  } from "react-icons/io";
@@ -8,6 +8,7 @@ import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useToken } from '../../../Components/Hook/useToken';
+import { Tooltip } from 'react-leaflet';
 
 export default function Navbar() {
   let [isOpen, setIsOpen] = useState(false)
@@ -105,16 +106,20 @@ export default function Navbar() {
             </div>
           <div className="">
             <ul className="flex space-x-6 pt-2">
-              <li onClick={() => setIsOpen(true)} >
+            <Tooltip content="Upload Medicines">
+              <li onClick={() => setIsOpen(true)} className='mr-3 mt-3'>
 
-                    <FaBriefcaseMedical className='pr-4 text-4xl'/>
+                    <FaBriefcaseMedical className='text-xl'/>
 
               </li>
-              <li>
+              </Tooltip>
+              <Tooltip content="Notifications">
+              <li className='mr-4 mt-3'>
                 <a className="text-Black" href="/notifactions">
-                    <IoMdNotifications  className='pr-3 text-4xl'/>
+                <Badge content="5"> <IoMdNotifications  className=' text-2xl'/></Badge>
                 </a>
               </li>
+              </Tooltip>
               <li>
                 <div className="flex items-center gap-x-1 ">
                       <Menu>

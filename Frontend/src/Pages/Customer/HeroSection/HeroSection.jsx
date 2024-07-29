@@ -14,7 +14,7 @@ export default function HeroSection() {
           </h1>
           <a
             className="  w-1/2 flex justify-center bg-black font-mono text-white p-2 md:p-4 rounded-lg"
-            href="/Customer/Order"
+            href="/customer/all-medicine-view"
           >
             <GiMedicines className="px-2 text-3xl"/>ORDER NOW 
           </a>

@@ -6,11 +6,12 @@ import Role from './Pages/Role/Role';
 import Index from './Pages/Customer/Index';
 import Index_Owner from './Pages/FarmacyOwner/Index';
 import Index_Rider from './Pages/Rider/Index';
-import Medicine from './Pages/Customer/Medicine/Medicine';
 import Verify from './Pages/Verify/Verify';
 import Information from './Pages/Information/Information';
 import Email from './Pages/Email';
 import CheckMedi from './Pages/FarmacyOwner/Inventory/CheckMedi';
+import Search from './Pages/Customer/Search/Search';
+import All from './Pages/Customer/Medicines/All';
 
 function App() {
     return (
@@ -43,7 +44,8 @@ function App() {
                     <Route path="/customer" element={<Index />} />
                     <Route path="/rider" element={<Index_Rider />} />
                     <Route path="/farmacy-owner" element={<Index_Owner />} />
-                    <Route path="/medicine" element={<Medicine />} />
+                    <Route path="/customer/search" element={<Search />} />
+                    <Route path="/customer/all-medicine-view" element={<All/>} />
                     <Route path="/verify-customer" element={<Verify isCustomer/>} />
                     <Route path="/verify-rider" element={<Verify isRider/>} />
                     <Route path="/verify-farmacy-owner" element={<Verify isOwner/>} />

@@ -1,5 +1,5 @@
 
-import { Avatar, Badge, Button, Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
+import { Avatar, Badge, Button, Menu, MenuHandler, MenuItem, MenuList, Tooltip } from '@material-tailwind/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBriefcaseMedical } from "react-icons/fa";
 import { IoMdNotifications  } from "react-icons/io";
@@ -8,7 +8,6 @@ import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useToken } from '../../../Components/Hook/useToken';
-import { Tooltip } from 'react-leaflet';
 
 export default function Navbar() {
   let [isOpen, setIsOpen] = useState(false)
@@ -96,7 +95,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className='bg-[#ffffff] rounded-lg border border-black shadow-lg'>
+    <div className='bg-[#ffffff] rounded-lg border border-[#d8d8d8] shadow-xl mb-2'>
       <div className="flex  justify-between  px-10 py-2">
           <div className="flex-1 water-text py-2">
               <a href="/farmacy-owner">

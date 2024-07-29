@@ -8,7 +8,7 @@ import Navbar from "./Navbar/Navbar";
 export default function Index_Owner() {
   return (
     <div className="lg:px-80">
-        <Navbar/>
+        <Navbar />
         <HeroSection/>
         <Medicines/>
         <Farmacy/>

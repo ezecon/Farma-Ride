@@ -1,5 +1,5 @@
 
-import { Button, Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
+import { Avatar, Button, Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBriefcaseMedical } from "react-icons/fa";
 import { IoMdNotifications  } from "react-icons/io";
@@ -23,12 +23,17 @@ export default function Navbar() {
 
   useEffect(() => {
     const verifyToken = async () => {
+      if(!token){
+        removeToken();
+        navigate('/login');
+      }
       try {
         const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
           console.log(response.data.decoded.id)
+          console.log(userID)
 
         } else {
           console.log("Token verification failed:", response.data);
@@ -84,6 +89,10 @@ export default function Navbar() {
     }
   };
 
+  const handleLogout = () => {
+    removeToken();
+    navigate('/login');
+  };
 
   return (
     <div className='bg-[#ffffff] rounded-lg border border-black shadow-lg'>
@@ -103,23 +112,25 @@ export default function Navbar() {
               </li>
               <li>
                 <a className="text-Black" href="/notifactions">
-                    <IoMdNotifications  className='pr-4 text-4xl'/>
+                    <IoMdNotifications  className='pr-3 text-4xl'/>
                 </a>
               </li>
               <li>
                 <div className="flex items-center gap-x-1 ">
                       <Menu>
                             <MenuHandler>
-                            <img
-                                  src={`http://localhost:5000/uploads/file-1722147007192.jpg`}
+                            <Avatar 
+                                  src={`http://localhost:5000/uploads/${userInfo?.photo}`}
                                     alt="avatar"
-                                    className="rounded-full w-10 border border-red-500"
+                                    withBorder={true}
+                                    color='green'
+                                    className="p-0.5"
                                   />
                             </MenuHandler>
                             <MenuList>
                               <Link to="/profile"><MenuItem className='font-mono'>Profile</MenuItem></Link>
                               <Link to="/dashboard"><MenuItem className='font-mono'>Dashboard</MenuItem></Link>
-                              <MenuItem className='font-mono'>Logout</MenuItem>
+                              <MenuItem onClick={handleLogout} className='font-mono'>Logout</MenuItem>
                             </MenuList>  
                     </Menu>
                 </div>

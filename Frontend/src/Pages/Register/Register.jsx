@@ -180,6 +180,7 @@ const handleSubmit = async (event) => {
                 aria-label="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
               />
             </div>
             <div>
@@ -192,6 +193,7 @@ const handleSubmit = async (event) => {
                 aria-label="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div>
@@ -204,6 +206,7 @@ const handleSubmit = async (event) => {
                 aria-label="Number"
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
+                required
               />
             </div>
            
@@ -217,6 +220,7 @@ const handleSubmit = async (event) => {
                 aria-label="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
             <div>
@@ -227,6 +231,7 @@ const handleSubmit = async (event) => {
                 placeholder="Re-Type Password" 
                 className="w-full p-3 border border-gray-300 rounded-lg bg-transparent text-white placeholder-gray-400"
                 aria-label="Password"
+              required
               />
             </div>
 

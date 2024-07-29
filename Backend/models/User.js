@@ -38,11 +38,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    Latitude:{
+    latitude:{
         type: String,
         default: ''
     },
-    Longitude:{
+    longitude:{
         type: String,
         default: ''
     },

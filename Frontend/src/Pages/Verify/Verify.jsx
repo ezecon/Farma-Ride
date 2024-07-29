@@ -41,9 +41,7 @@ export default function Verify({isCustomer, isRider, isOwner}) {
     useEffect(() => {
         const fetch = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/users/verify', {
-                    params: { email: userEmail } // Correct parameter usage
-                });
+                const response = await axios.get(`http://localhost:5000/api/users/verify/${userEmail}`);
                 if (response.status === 200) {
                     console.log("data fetched");
                     setState(response.data.isVerified);
@@ -59,19 +57,25 @@ export default function Verify({isCustomer, isRider, isOwner}) {
         if (state === true) {
             toast.success("Verification Complete")
             if(isCustomer){
-                navigate('/verify/information-customer');
+                navigate('/verify/information-customer', {
+                    state: { userEmail: userEmail }
+                  });
               }
               else if(isRider){
-                navigate('/verify/information-rider');
+                navigate('/verify/information-rider', {
+                    state: { userEmail: userEmail }
+                  });
               }
               else if(isOwner){
-                navigate('/verify/information-farmacy-owner');
+                navigate('/verify/information-farmacy-owner', {
+                    state: { userEmail: userEmail }
+                  });
               }
             
         } else {
             fetch();
         }
-    }, [state, navigate]);
+    });
     
     
 

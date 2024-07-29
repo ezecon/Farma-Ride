@@ -2,6 +2,28 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 const User = require('../models/User');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+//forr uploading images 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+// Initialize upload with Multer storage
+const upload = multer({ storage: storage });
+
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir);
+}
 
 // Create a user
 router.post('/register', async (req, res) => {
@@ -44,6 +66,14 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+router.get('/farmacy', async (req, res) => {
+    try {
+        const users = await User.find({role:'farmacy-owner'});
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 // Get user by ID
 router.get('/:id', async (req, res) => {
@@ -59,9 +89,9 @@ router.get('/:id', async (req, res) => {
 });
 
 // Get user by email
-router.get('/verify', async (req, res) => {
+router.get('/verify/:userEmail', async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.query.email }); // Use query parameter for email
+        const user = await User.findOne({ email: req.params.userEmail }); // Use query parameter for email
         if (user) {
             res.status(200).json({
                 isVerified: user.isVerified,
@@ -78,7 +108,7 @@ router.get('/verify', async (req, res) => {
 // Verify user by email
 router.put('/verify', async (req, res) => {
     try {
-        const { email } = req.body; // Correctly extract email from body
+        const { email } = req.body;
         if (!email) {
             return res.status(400).json({ message: 'Email is required' });
         }
@@ -93,6 +123,45 @@ router.put('/verify', async (req, res) => {
         res.status(200).json(user);
     } catch (err) {
         res.status(500).json({ message: err.message });
+    }
+});
+
+// update user by email
+router.put('/update', upload.single('photo'), async (req, res) => {
+    const { email, city, zipCode, district, country, latitude, longitude } = req.body;
+    const photo = req.file ? req.file.filename : null;
+
+    try {
+        // Validate the incoming data
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required.' });
+        }
+
+        const updateData = {
+            city,
+            zipCode,
+            district,
+            country,
+            latitude,
+            longitude
+        };
+
+        if (photo) {
+            updateData.photo = photo;
+        }
+
+        // Find and update the user
+        const updatedUser = await User.findOneAndUpdate({ email: email }, updateData, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        // Send success response
+        res.status(200).json({ message: 'User updated successfully.', user: updatedUser });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ error: 'Server error. Please try again.' });
     }
 });
 

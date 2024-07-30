@@ -19,6 +19,7 @@ export default function Navbar() {
   const { token, removeToken } = useToken();
   const navigate = useNavigate();
   const [userID, setUserID] = useState(null);
+  const [owner, setOwner] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function Navbar() {
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
+          setOwner(userID);
           console.log(response.data.decoded.id)
           console.log(userID)
 
@@ -69,6 +71,7 @@ export default function Navbar() {
   const handleAdd = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+    formData.append('owner', owner);
     formData.append('medicineName', medicineName);
     formData.append('description', description);
     formData.append('price', price);

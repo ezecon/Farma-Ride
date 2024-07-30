@@ -14,6 +14,8 @@ import Email from "../../Pages/Email";
 import Index_Rider from "../../Pages/Rider/Index";
 import Index_Owner from "../../Pages/FarmacyOwner/Index";
 import CheckMedi from "../../Pages/FarmacyOwner/Inventory/CheckMedi";
+import Main_Farmacy from "../Farmacy/Main";
+import Main_Rider from "../Rider/Main";
 
 const router = createBrowserRouter([
     {
@@ -44,8 +46,12 @@ const router = createBrowserRouter([
     },
     {
         path: "/farmacy-owner",
-        element: <Index_Owner />,
+        element: <Main_Farmacy />,
         children: [
+            {
+                path:"",
+                element: <Index_Owner/>
+            },
             {
                 path: "check-medicine/:id",
                 element: <CheckMedi />
@@ -54,7 +60,13 @@ const router = createBrowserRouter([
     },
     {
         path: "/rider",
-        element: <Index_Rider />
+        element: <Main_Rider />,
+        children:[
+            {
+                path: "",
+                element:<Index_Rider/>
+            }
+        ]
     },
     {
         path: "/email",

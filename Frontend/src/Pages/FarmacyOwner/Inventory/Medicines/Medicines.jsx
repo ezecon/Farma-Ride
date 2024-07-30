@@ -1,15 +1,51 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import MedicineCard from "./MedicineCard";
+import { useNavigate } from "react-router-dom";
+import { useToken } from "../../../../Components/Hook/useToken";
 
 export default function Medicines() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
+  const { token, removeToken } = useToken();
+  const navigate = useNavigate();
+  const [userID, setUserID] = useState(null);
+  const [owner, setOwner] = useState(null);
+
+
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      if(!token){
+        removeToken();
+        navigate('/login');
+      }
+      try {
+        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+
+        if (response.status === 200 && response.data.valid) {
+          setUserID(response.data.decoded.id);
+          setOwner(userID)
+          console.log(response.data.decoded.id)
+          console.log(userID)
+
+        } else {
+          console.log("Token verification failed:", response.data);
+          removeToken();
+        }
+      } catch (error) {
+        console.error('Error verifying token:', error);
+        removeToken();
+      }
+    };
+
+    verifyToken();
+  }, [token, navigate, removeToken]);
 
   useEffect(() => {
     const fetchMedicines = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/medicines');
+        const response = await axios.get(`http://localhost:5000/api/medicines/owner/${owner}`);
         if (response.status === 200) {
           setData(response.data);
         }
@@ -19,7 +55,7 @@ export default function Medicines() {
     };
 
     fetchMedicines();
-  }, []);
+  });
 
 
   return (

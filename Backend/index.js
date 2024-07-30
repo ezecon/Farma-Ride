@@ -21,6 +21,7 @@ mongoose.connect('mongodb+srv://mdeconozzama:rboEBf8GIcHBkN0x@cluster0.efsb2yz.m
 app.use('/api/users', require('./routes/users.js'));
 app.use('/api/users/login', require('./Verification/Auth.js'));
 app.use('/api/medicines', require('./routes/medicines.js'));
+app.use('/api/carts', require('./routes/carts.js'));
 
 const verify = require('./Verification/verifytoken.js');
 app.use('/api/verifyToken', verify);

@@ -4,6 +4,7 @@ import Business from "../Business/Business";
 import GetApp from "../GetApp/GetApp";
 import HeroSection from "../HeroSection/HeroSection";
 import Navbar from "../Navbar/Navbar";
+import { Footer } from "../../Pages/FarmacyOwner/Footer/Footer";
 
 export default function Main() {
   const [isLoading, setIsLoading] = useState(true);
@@ -41,6 +42,7 @@ export default function Main() {
       <HeroSection />
       <Business />
       <GetApp />
+      <Footer/>
     </div>
   );
 }

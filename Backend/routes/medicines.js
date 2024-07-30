@@ -35,10 +35,11 @@ router.post('/add-medicine', (req, res) => {
     if (err) {
       res.status(400).send({ msg: err });
     } else {
-      const { medicineName, description, price, status } = req.body;
+      const { owner, medicineName, description, price, status } = req.body;
       const filename = req.file ? req.file.filename : null;
 
       const newMedicine = new Medicine({
+        owner,
         medicineName,
         description,
         price,
@@ -55,6 +56,20 @@ router.post('/add-medicine', (req, res) => {
     }
   });
 });
+
+
+// Get items of that owner
+router.get('/owner/:owner', async (req, res) => {
+  try {
+    const medicines = await Medicine.find({ owner: req.params.owner });
+    res.status(200).json(medicines);
+  } catch (err) {
+    res.status(500).send({ msg: 'Database error', err });
+  }
+});
+
+
+
 router.get('/', async (req, res) => {
     try {
       const medicines = await Medicine.find();

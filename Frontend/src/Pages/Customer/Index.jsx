@@ -9,8 +9,7 @@ import Navbar from "./Navbar/Navbar";
 
 export default function Index() {
   return (
-    <div className="lg:px-80">
-        <Navbar/>
+    <div>
         <HeroSection/>
         <Count/>
         <Medicines/>

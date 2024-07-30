@@ -1,6 +1,5 @@
 
 import { IoSearch } from "react-icons/io5";
-import Navbar from "../Navbar/Navbar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../Medicines/Card";
@@ -26,8 +25,7 @@ export default function Search() {
       fetchMedicines();
     }, []);
   return (
-    <div className="lg:px-80">
-                <Navbar/>
+    <div>
                 <div className="min-h-screen bg-white text-black flex flex-col items-center">
                     <div className={`flex flex-col items-center justify-center w-full lg:px-36 mt-8 lg:mt-0`}>
                         <div className="w-full text-center  montserrat-alternates-thin my-36 p-4">

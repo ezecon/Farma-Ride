@@ -1,7 +1,13 @@
 import { TiShoppingCart } from "react-icons/ti";
 import { CgDetailsMore } from "react-icons/cg";
+import { useNavigate } from "react-router-dom";
 export default function PhotoCard({ data }) {
-  const { filename, medicineName, price}=data;
+  const {_id, filename, medicineName, price}=data;
+  const navigate = useNavigate();
+
+  const handleNavigate =(id)=>{
+    navigate(`/customer/single-medicine-view/${id}`)
+  }
   return (
     <div className="relative w-72 h-96 overflow-hidden rounded-lg shadow-lg group">
       {/* Image */}
@@ -19,7 +25,7 @@ export default function PhotoCard({ data }) {
       </div>
       <div>
       <div className="flex justify-between ">
-              <CgDetailsMore className="float-left pl-4 pb-5 text-6xl text-[goldenrod] cursor-pointer"/>
+              <CgDetailsMore className="float-left pl-4 pb-5 text-6xl text-[goldenrod] cursor-pointer" onClick={()=>handleNavigate(_id)}/>
              <TiShoppingCart className="float-right pr-5 pb-5 text-6xl text-[goldenrod] cursor-pointer"/>
       </div>
       </div>

@@ -16,6 +16,7 @@ import Index_Owner from "../../Pages/FarmacyOwner/Index";
 import CheckMedi from "../../Pages/FarmacyOwner/Inventory/CheckMedi";
 import Main_Farmacy from "../Farmacy/Main";
 import Main_Rider from "../Rider/Main";
+import Profile_Customer from "../../Pages/Customer/Profile/Profile";
 
 const router = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: <Index />
+            },
+            {
+                path: "profile",
+                element: <Profile_Customer />
             },
             {
                 path: "search",

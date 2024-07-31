@@ -6,7 +6,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-//forr uploading images 
+// Configure Multer for image uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/');
@@ -16,7 +16,6 @@ const storage = multer.diskStorage({
     }
 });
 
-// Initialize upload with Multer storage
 const upload = multer({ storage: storage });
 
 // Create uploads directory if it doesn't exist
@@ -30,16 +29,13 @@ router.post('/register', async (req, res) => {
     const { name, email, password, number, role, verificationCode } = req.body;
 
     try {
-        // Check for existing user with the same email
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: 'Email already in use' });
         }
 
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create a new user
         const user = new User({
             name,
             email,
@@ -47,7 +43,7 @@ router.post('/register', async (req, res) => {
             number,
             verificationCode,
             role,
-            isVerified: false // Add this if it's part of your schema
+            isVerified: false
         });
 
         const newUser = await user.save();
@@ -66,9 +62,11 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+// Get users by role
 router.get('/farmacy', async (req, res) => {
     try {
-        const users = await User.find({role:'farmacy-owner'});
+        const users = await User.find({ role: 'farmacy-owner' });
         res.json(users);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -88,10 +86,10 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Get user by email
+// Verify user by email
 router.get('/verify/:userEmail', async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.params.userEmail }); // Use query parameter for email
+        const user = await User.findOne({ email: req.params.userEmail });
         if (user) {
             res.status(200).json({
                 isVerified: user.isVerified,
@@ -105,7 +103,7 @@ router.get('/verify/:userEmail', async (req, res) => {
     }
 });
 
-// Verify user by email
+// Update verification status
 router.put('/verify', async (req, res) => {
     try {
         const { email } = req.body;
@@ -126,13 +124,11 @@ router.put('/verify', async (req, res) => {
     }
 });
 
-// update user by email
-router.put('/update', upload.single('photo'), async (req, res) => {
+// Update user by email (without photo)
+router.put('/update', upload.none(), async (req, res) => {
     const { email, city, zipCode, district, country, latitude, longitude } = req.body;
-    const photo = req.file ? req.file.filename : null;
 
     try {
-        // Validate the incoming data
         if (!email) {
             return res.status(400).json({ error: 'Email is required.' });
         }
@@ -146,22 +142,48 @@ router.put('/update', upload.single('photo'), async (req, res) => {
             longitude
         };
 
-        if (photo) {
-            updateData.photo = photo;
-        }
-
-        // Find and update the user
-        const updatedUser = await User.findOneAndUpdate({ email: email }, updateData, { new: true });
+        const updatedUser = await User.findOneAndUpdate({ email }, updateData, { new: true });
 
         if (!updatedUser) {
             return res.status(404).json({ error: 'User not found.' });
         }
 
-        // Send success response
         res.status(200).json({ message: 'User updated successfully.', user: updatedUser });
     } catch (error) {
         console.error('Error updating user:', error);
         res.status(500).json({ error: 'Server error. Please try again.' });
+    }
+});
+
+// Update user profile with photo upload
+router.put('/profile/:id', upload.single('photo'), async (req, res) => {
+    const { name, email, number, city, zipCode, district, country, latitude, longitude } = req.body;
+    const photo = req.file ? req.file.filename : null;
+
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ success: false, msg: 'User not found' });
+        }
+
+        user.name = name || user.name;
+        user.email = email || user.email;
+        user.number = number || user.number;
+        user.city = city || user.city;
+        user.zipCode = zipCode || user.zipCode;
+        user.district = district || user.district;
+        user.country = country || user.country;
+        user.latitude = latitude || user.latitude;
+        user.longitude = longitude || user.longitude;
+
+        if (photo) {
+            user.photo = photo;
+        }
+
+        await user.save();
+        res.send({ success: true, msg: 'Profile updated successfully', user });
+    } catch (err) {
+        res.status(500).send({ success: false, msg: 'Database error', err });
     }
 });
 

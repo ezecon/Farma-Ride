@@ -1,10 +1,12 @@
-import { Avatar, Button, Drawer, IconButton, Menu, MenuHandler, MenuItem, MenuList, Tooltip, Typography } from '@material-tailwind/react';
+import { Avatar, Button, Card, CardBody, Dialog, DialogBody, DialogHeader, Drawer, IconButton, Menu, MenuHandler, MenuItem, MenuList, Radio, Tooltip, Typography } from '@material-tailwind/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch } from "react-icons/fa";
 import { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useToken } from '../../../Components/Hook/useToken';
 import { GiShoppingCart } from 'react-icons/gi';
+import Map from '../MapCard/SingleMap';
+import toast from "react-hot-toast";
 
 export default function Navbar() {
   const { token, removeToken } = useToken();
@@ -12,28 +14,58 @@ export default function Navbar() {
   const [userID, setUserID] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [open, setOpen] = useState(false);
+  const [openX, setOpenX] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [latitudeShared, setLatitude] = useState(null);
+  const [longitudeShared, setLongitude] = useState(null);
+
+  const [selectedMethod, setSelectedMethod] = useState(null);
+
+  const handlePaymentMethodChange = (method) => {
+    setSelectedMethod(method);
+  };
+
+  const handleLiveLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLatitude(position.coords.latitude);
+          setLongitude(position.coords.longitude);
+          toast.success('Shared!')
+        },
+        (error) => {
+          console.error("Error getting geolocation: ", error);
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  };
+
 
   const openDrawer = () => setOpen(true);
   const closeDrawer = () => setOpen(false);
+  const handleOpenX = () => setOpenX(!openX);
 
   useEffect(() => {
     const verifyToken = async () => {
       if (!token) {
         removeToken();
         navigate('/login');
+        return;
       }
       try {
         const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
-
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
         } else {
           removeToken();
+          navigate('/login');
         }
       } catch (error) {
         console.error('Error verifying token:', error);
         removeToken();
+        navigate('/login');
       }
     };
 
@@ -41,36 +73,40 @@ export default function Navbar() {
   }, [token, navigate, removeToken]);
 
   useEffect(() => {
-    if (!userID) return;
-
     const fetchUserInfo = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
-        if (response.status === 200) {
-          setUserInfo(response.data);
-        } else {
-          console.log(response.data);
+      if (userID) {
+        try {
+          const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
+          if (response.status === 200) {
+            setUserInfo(response.data);
+          } else {
+            console.log(response.data);
+          }
+        } catch (err) {
+          console.error('Error fetching user info:', err);
         }
-      } catch (err) {
-        console.error(err);
       }
     };
 
     const fetchCartItems = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/carts/buyer/${userID}`);
-        if (response.status === 200) {
-          setCartItems(response.data);
-        } else {
-          console.log(response.data);
+      if (userID) {
+        try {
+          const response = await axios.get(`http://localhost:5000/api/carts/buyer/${userID}`);
+          if (response.status === 200) {
+            setCartItems(response.data);
+          } else {
+            console.log(response.data);
+          }
+        } catch (err) {
+          console.error('Error fetching cart items:', err);
         }
-      } catch (err) {
-        console.error(err);
       }
     };
 
-    fetchUserInfo();
-    fetchCartItems();
+    if (userID) {
+      fetchUserInfo();
+      fetchCartItems();
+    }
   }, [userID]);
 
   const updateQuantity = async (id, quantity, price) => {
@@ -89,7 +125,7 @@ export default function Navbar() {
 
   const removeItem = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/carts/delete/${id}`,);
+      await axios.delete(`http://localhost:5000/api/carts/delete/${id}`);
       setCartItems((prevItems) =>
         prevItems.filter((item) => item._id !== id)
       );
@@ -107,11 +143,15 @@ export default function Navbar() {
     navigate('/login');
   };
 
+  
+  const handleOrder=()=>{
+    
+  }
 
   return (
     <div className='bg-[#ffffff] rounded-lg border border-[#d8d8d8] shadow-xl mb-2'>
       <div className="flex justify-between px-10 py-2">
-        <div className="flex-1 water-text py-2">
+        <div className="flex-1 water-text py-2 water-text">
           <a href="/customer">
             <h1 className="font-bold sm:text-lg md:text-xl text-white">FARMA-RIDE</h1>
             <h1 className="font-bold sm:text-lg md:text-xl text-white">FARMA-RIDE</h1>
@@ -144,7 +184,7 @@ export default function Navbar() {
                     />
                   </MenuHandler>
                   <MenuList>
-                    <Link to="/profile"><MenuItem className='font-mono'>Profile</MenuItem></Link>
+                    <Link to="/customer/profile"><MenuItem className='font-mono'>Profile</MenuItem></Link>
                     <Link to="/dashboard"><MenuItem className='font-mono'>Dashboard</MenuItem></Link>
                     <MenuItem onClick={handleLogout} className='font-mono'>Logout</MenuItem>
                   </MenuList>
@@ -223,13 +263,65 @@ export default function Navbar() {
                   <Typography variant="h6">Total:</Typography>
                   <Typography variant="h6">৳{calculateTotal()}</Typography>
                 </div>
-                <Button size="sm" className="mt-4" fullWidth>
+                <Button size="sm" className="mt-4" fullWidth onClick={handleOpenX}>
                   Checkout
                 </Button>
               </div>
             )}
           </Drawer>
         </Fragment>
+      </div>
+      <div>
+        <Dialog open={openX} handler={handleOpenX}>
+          <DialogHeader className='text-[goldenrod] text-center text-2xl montserrat-alternates-light'>Order Confirmation</DialogHeader>
+          <DialogBody>
+            <div>
+                  <div className="border rounded-lg p-4 bg-white shadow-md">
+                    <h1 className="text-xl font-bold mb-2">Address:</h1>
+                    <p className="text-gray-600 mb-4">Want to use your default address?</p>
+                    <div className="mb-5">
+                      {userInfo && userInfo.latitude && userInfo.longitude && (
+                        <Map className="w-full h-64 rounded-lg" latitude={userInfo.latitude} longitude={userInfo.longitude} />
+                      )}
+                      <p className='montserrat-alternates-light  text-sm'>if you want to use default, don't need to select anything</p>
+                    </div>
+                    <p className="text-gray-600 mb-4">or,</p>
+                    <Button onClick={handleLiveLocation} className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                      Live
+                    </Button>
+                  </div>
+                  <div className="border rounded-lg p-4 bg-white shadow-md">
+                   <h1 className="text-xl font-bold mb-2">Payment Method:</h1>
+                   <div className="space-y-4 mb-6">
+                            <Card className="cursor-pointer" onClick={() => handlePaymentMethodChange('bkash')}>
+                              <CardBody className={`p-4 ${selectedMethod === 'bkash' ? 'border-2 border-blue-500' : ''}`}>
+                                <Radio 
+                                  name="paymentMethod"
+                                  label="with Bkash"
+                                  checked={selectedMethod === 'bkash'}
+                                  onChange={() => handlePaymentMethodChange('bkash')}
+                                />
+                              </CardBody>
+                            </Card>
+                            <Card className="cursor-pointer" onClick={() => handlePaymentMethodChange('cashOnDel')}>
+                              <CardBody className={`p-4 ${selectedMethod === 'cashOnDel' ? 'border-2 border-blue-500' : ''}`}>
+                                <Radio 
+                                  name="paymentMethod"
+                                  label="Cash On Delivery"
+                                  checked={selectedMethod === 'cashOnDel'}
+                                  onChange={() => handlePaymentMethodChange('cashOnDel')}
+                                />
+                              </CardBody>
+                            </Card>
+                          </div>
+                          <div className='flex justify-center'>
+                            <Button onClick={handleOrder} className='bg-[goldenrod]'>Confirm Order</Button>
+                          </div>
+                  </div>
+
+            </div>
+          </DialogBody>
+        </Dialog>
       </div>
     </div>
   );

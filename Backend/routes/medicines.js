@@ -102,5 +102,33 @@ router.get('/', async (req, res) => {
     }
   });
   
+  router.put('/:id', upload, async (req, res) => {
+    try {
+      const { medicineName, description, price, status } = req.body;
+      const filename = req.file ? req.file.filename : undefined;
+  
+      // Find the medicine by ID
+      const medicine = await Medicine.findById(req.params.id);
+      if (!medicine) {
+        return res.status(404).send({ msg: 'Medicine not found' });
+      }
+  
+      // Update medicine details
+      medicine.medicineName = medicineName || medicine.medicineName;
+      medicine.description = description || medicine.description;
+      medicine.price = price || medicine.price;
+      medicine.status = status || medicine.status;
+      if (filename) {
+        medicine.filename = filename;
+      }
+  
+      // Save updated medicine
+      await medicine.save();
+      res.send({ msg: 'Medicine updated successfully', medicine });
+    } catch (err) {
+      res.status(500).send({ msg: 'Database error', err });
+    }
+  });
+  
 // Export router
 module.exports = router;

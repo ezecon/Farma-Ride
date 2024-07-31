@@ -1,13 +1,61 @@
 import { TiShoppingCart } from "react-icons/ti";
 import { CgDetailsMore } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useToken } from "../../../Components/Hook/useToken";
+import axios from "axios";
 export default function PhotoCard({ data }) {
   const {_id, filename, medicineName, price}=data;
   const navigate = useNavigate();
+  const { token, removeToken } = useToken();
+  const [userID, setUserID] = useState(null);
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      if (!token) {
+        removeToken();
+        navigate('/login');
+      }
+      try {
+        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+
+        if (response.status === 200 && response.data.valid) {
+          setUserID(response.data.decoded.id);
+        } else {
+          console.log("Token verification failed:", response.data);
+          removeToken();
+        }
+      } catch (error) {
+        console.error('Error verifying token:', error);
+        removeToken();
+      }
+    };
+
+    verifyToken();
+  }, [token, navigate, removeToken]);
 
   const handleNavigate =(id)=>{
     navigate(`/customer/single-medicine-view/${id}`)
   }
+  const handleAddToCart = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/carts/add-cart', {
+        buyerId: userID,
+        productId: _id,
+        medicineName:medicineName,
+        quantity: 1,
+        price: price ,
+        singlePrice: price
+      });
+      if (response.status === 200) {
+        console.log("Added to Cart");
+        toast.success("Added to Cart");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="relative w-72 h-96 overflow-hidden rounded-lg shadow-lg group">
       {/* Image */}
@@ -26,7 +74,7 @@ export default function PhotoCard({ data }) {
       <div>
       <div className="flex justify-between ">
               <CgDetailsMore className="float-left pl-4 pb-5 text-6xl text-[goldenrod] cursor-pointer" onClick={()=>handleNavigate(_id)}/>
-             <TiShoppingCart className="float-right pr-5 pb-5 text-6xl text-[goldenrod] cursor-pointer"/>
+             <TiShoppingCart className="float-right pr-5 pb-5 text-6xl text-[goldenrod] cursor-pointer"onClick={handleAddToCart}/>
       </div>
       </div>
       </div>

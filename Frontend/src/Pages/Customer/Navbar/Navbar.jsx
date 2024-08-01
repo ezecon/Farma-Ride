@@ -57,7 +57,7 @@ export default function Navbar() {
         return;
       }
       try {
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://farma-ride-server.vercel.app/api/verifyToken', { token });
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
         } else {
@@ -78,7 +78,7 @@ export default function Navbar() {
     const fetchUserInfo = async () => {
       if (userID) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
+          const response = await axios.get(`https://farma-ride-server.vercel.app/api/users/${userID}`);
           if (response.status === 200) {
             setUserInfo(response.data);
             setLatitudeX(response.data.latitude);
@@ -95,7 +95,7 @@ export default function Navbar() {
     const fetchCartItems = async () => {
       if (userID) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/carts/buyer/${userID}`);
+          const response = await axios.get(`https://farma-ride-server.vercel.app/api/carts/buyer/${userID}`);
           if (response.status === 200) {
             setCartItems(response.data);
           } else {
@@ -116,7 +116,7 @@ export default function Navbar() {
   const updateQuantity = async (id, quantity, price) => {
     if (quantity < 1) return;
     try {
-      await axios.put(`http://localhost:5000/api/carts/update/${id}`, { quantity, price });
+      await axios.put(`https://farma-ride-server.vercel.app/api/carts/update/${id}`, { quantity, price });
       setCartItems((prevItems) =>
         prevItems.map((item) =>
           item._id === id ? { ...item, quantity, price } : item
@@ -129,7 +129,7 @@ export default function Navbar() {
 
   const removeItem = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/carts/delete/${id}`);
+      await axios.delete(`https://farma-ride-server.vercel.app/api/carts/delete/${id}`);
       setCartItems((prevItems) =>
         prevItems.filter((item) => item._id !== id)
       );
@@ -149,7 +149,7 @@ export default function Navbar() {
 
   const deleteItem = async (buyerId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/carts/${buyerId}`);
+      await axios.delete(`https://farma-ride-server.vercel.app/api/carts/${buyerId}`);
     } catch (error) {
       console.error('Error removing item:', error);
     }
@@ -170,7 +170,7 @@ export default function Navbar() {
     }
 
     try {
-      const response = await axios.post(`http://localhost:5000/api/purchases/buy`, {
+      const response = await axios.post(`https://farma-ride-server.vercel.app/api/purchases/buy`, {
         buyerId: userID,
         sellerIds: cartItems.map(item => item.ownerId),
         products: cartItems.map(item => item.productId),

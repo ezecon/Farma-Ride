@@ -22,7 +22,7 @@ export default function Single() {
         navigate('/login');
       }
       try {
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://farma-ride-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
@@ -42,7 +42,7 @@ export default function Single() {
   useEffect(() => {
     const fetchMedicines = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/medicines/${id}`);
+        const response = await axios.get(`https://farma-ride-server.vercel.app/api/medicines/${id}`);
         if (response.status === 200) {
           setData(response.data);
         }
@@ -69,7 +69,7 @@ export default function Single() {
 
   const handleAddToCart = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/carts/add-cart', {
+      const response = await axios.post('https://farma-ride-server.vercel.app/api/carts/add-cart', {
         buyerId: userID,
         ownerId: data.owner,
         productId: data._id,

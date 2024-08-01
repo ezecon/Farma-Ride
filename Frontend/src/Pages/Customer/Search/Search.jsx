@@ -25,7 +25,7 @@ export default function Search() {
         return;
       }
       try {
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://farma-ride-server.vercel.app/api/verifyToken', { token });
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
         } else {
@@ -46,7 +46,7 @@ export default function Search() {
     const fetchUserInfo = async () => {
       if (userID) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
+          const response = await axios.get(`https://farma-ride-server.vercel.app/api/users/${userID}`);
           if (response.status === 200) {
             setUserInfo(response.data);
           } else {
@@ -64,7 +64,7 @@ export default function Search() {
   useEffect(() => {
     const OwnerFetch = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/users/farmacy');
+        const response = await axios.get('https://farma-ride-server.vercel.app/api/users/farmacy');
         if (response.status === 200) {
           console.log('Data fetched:', response.data); // Log fetched data
           
@@ -90,7 +90,7 @@ export default function Search() {
   useEffect(() => {
     const fetchMedicines = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/medicines');
+        const response = await axios.get('https://farma-ride-server.vercel.app/api/medicines');
         if (response.status === 200) {
           // Filter medicines where the owner is in the ownerIDs array
           const filteredMedicines = response.data.filter(medicine => ownerIDs.includes(medicine.owner));

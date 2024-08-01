@@ -18,7 +18,7 @@ export default function PhotoCard({ data }) {
         navigate('/login');
       }
       try {
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://farma-ride-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
@@ -40,7 +40,7 @@ export default function PhotoCard({ data }) {
   }
   const handleAddToCart = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/carts/add-cart', {
+      const response = await axios.post('https://farma-ride-server.vercel.app/api/carts/add-cart', {
         buyerId: userID,
         ownerId: owner,
         productId: _id,

@@ -19,7 +19,7 @@ export default function Near() {
         return;
       }
       try {
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://farma-ride-server.vercel.app/api/verifyToken', { token });
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
         } else {
@@ -40,7 +40,7 @@ export default function Near() {
     const fetchUserInfo = async () => {
       if (userID) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
+          const response = await axios.get(`https://farma-ride-server.vercel.app/api/users/${userID}`);
           if (response.status === 200) {
             setUser(response.data);
           } else {
@@ -60,7 +60,7 @@ export default function Near() {
   useEffect(() => {
     const mapFetch = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/users/farmacy');
+        const response = await axios.get('https://farma-ride-server.vercel.app/api/users/farmacy');
         if (response.status === 200) {
           console.log('Data fetched:', response.data); // Log fetched data
           setData(response.data);

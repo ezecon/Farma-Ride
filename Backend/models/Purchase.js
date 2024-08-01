@@ -1,32 +1,34 @@
 const mongoose = require('mongoose');
 
-const cartSchema = new mongoose.Schema({
+const purchaseSchema = new mongoose.Schema({
     buyerId: { 
         type: String, 
         required: true 
     },
-    ownerId: { 
-        type: String, 
+    sellerIds: { 
+        type: [String], 
         required: true 
     },
-    productId: { 
-        type: String, 
+    products: { 
+        type: [String], 
         required: true 
     },
-    quantity:{
-        type: Number,
-        required: true,
+    latitude:{
+        type: String,
     },
-    medicineName:{
+    longitude:{
+        type: String,
+    },
+    buyType:{
         type: String,
         required: true,
     },
     price:{
-        type: Number,
+        type: [Number],
         required: true
     },
-    singlePrice:{
-        type: Number,
+    quantity:{
+        type: [Number],
         required: true
     },
     date:{
@@ -37,4 +39,4 @@ const cartSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('Cart', cartSchema);
+module.exports = mongoose.model('Purchase', purchaseSchema);

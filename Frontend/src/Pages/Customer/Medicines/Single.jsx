@@ -71,6 +71,7 @@ export default function Single() {
     try {
       const response = await axios.post('http://localhost:5000/api/carts/add-cart', {
         buyerId: userID,
+        ownerId: data.owner,
         productId: data._id,
         medicineName:data.medicineName,
         quantity: count,
@@ -89,7 +90,7 @@ export default function Single() {
   return (
     <div className="flex flex-col lg:flex-row p-5 gap-">
       <div className="lg:w-1/2 h-auto flex justify-center lg:justify-start mb-5 lg:mb-0">
-        <img className="w-full lg:w-5/6 m-5 rounded-lg" src={`http://localhost:5000/uploads/${data.filename}`} alt={data.medicineName} />
+        <img className="w-full lg:w-5/6 m-5 rounded-lg" src={data.filename} alt={data.medicineName} />
       </div>
       <div className="lg:w-1/2 w-full h-autoborder border-[#afafaf] rounded-lg p-5 shadow-lg">
         <p className="text-sm text-center italic font-thin text-[#09b626]">{data.status}</p>

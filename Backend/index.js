@@ -22,6 +22,7 @@ app.use('/api/users', require('./routes/users.js'));
 app.use('/api/users/login', require('./Verification/Auth.js'));
 app.use('/api/medicines', require('./routes/medicines.js'));
 app.use('/api/carts', require('./routes/carts.js'));
+app.use('/api/purchases', require('./routes/purchases.js'));
 
 const verify = require('./Verification/verifytoken.js');
 app.use('/api/verifyToken', verify);

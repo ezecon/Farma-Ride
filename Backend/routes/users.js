@@ -5,24 +5,12 @@ const User = require('../models/User');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const cloudinary = require('../Cloudinary.js');
 
-// Configure Multer for image uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
 
+// Multer setup
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-
-// Create uploads directory if it doesn't exist
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir);
-}
 
 // Create a user
 router.post('/register', async (req, res) => {
@@ -125,22 +113,50 @@ router.put('/verify', async (req, res) => {
 });
 
 // Update user by email (without photo)
-router.put('/update', upload.none(), async (req, res) => {
-    const { email, city, zipCode, district, country, latitude, longitude } = req.body;
+router.put('/update', upload.single('photo'), async (req, res) => {
+    const { 
+        email, 
+        division,
+        upazilas,
+        zipCode,
+        district,
+        country,
+        latitude,
+        longitude
+    } = req.body;
+
+    let photoUrl = null;
 
     try {
         if (!email) {
             return res.status(400).json({ error: 'Email is required.' });
         }
 
+        // Handle photo upload if present
+        if (req.file) {
+            const result = await new Promise((resolve, reject) => {
+                cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }).end(req.file.buffer);
+            });
+
+            photoUrl = result.secure_url;
+        }
+
         const updateData = {
-            city,
+            division,
+            upazilas,
             zipCode,
             district,
             country,
             latitude,
             longitude
         };
+
+        if (photoUrl) {
+            updateData.photo = photoUrl;
+        }
 
         const updatedUser = await User.findOneAndUpdate({ email }, updateData, { new: true });
 
@@ -155,12 +171,24 @@ router.put('/update', upload.none(), async (req, res) => {
     }
 });
 
-// Update user profile with photo upload
 router.put('/profile/:id', upload.single('photo'), async (req, res) => {
     const { name, email, number, city, zipCode, district, country, latitude, longitude } = req.body;
-    const photo = req.file ? req.file.filename : null;
+    let photoUrl = null;
 
     try {
+        // Upload photo to Cloudinary if present
+        if (req.file) {
+            const result = await new Promise((resolve, reject) => {
+                cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }).end(req.file.buffer);
+            });
+
+            photoUrl = result.secure_url;
+        }
+
+        // Find the user and update profile
         const user = await User.findById(req.params.id);
         if (!user) {
             return res.status(404).json({ success: false, msg: 'User not found' });
@@ -176,8 +204,8 @@ router.put('/profile/:id', upload.single('photo'), async (req, res) => {
         user.latitude = latitude || user.latitude;
         user.longitude = longitude || user.longitude;
 
-        if (photo) {
-            user.photo = photo;
+        if (photoUrl) {
+            user.photo = photoUrl;
         }
 
         await user.save();
@@ -187,6 +215,7 @@ router.put('/profile/:id', upload.single('photo'), async (req, res) => {
     }
 });
 
+module.exports = router;
 // Delete user by email
 router.delete('/delete', async (req, res) => {
     const { email } = req.body;

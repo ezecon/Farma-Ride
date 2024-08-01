@@ -18,10 +18,15 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    city:{
+    division:{
         type: String,
         default: ''
     },
+    upazilas:{
+        type: String,
+        default: ''
+    },
+
     zipCode:{
         type: String,
         default: ''

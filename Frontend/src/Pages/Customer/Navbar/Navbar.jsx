@@ -7,6 +7,7 @@ import { useToken } from '../../../Components/Hook/useToken';
 import { GiShoppingCart } from 'react-icons/gi';
 import Map from '../MapCard/SingleMap';
 import toast from "react-hot-toast";
+import OrderButton from './Btton';
 
 export default function Navbar() {
   const { token, removeToken } = useToken();
@@ -16,8 +17,10 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [openX, setOpenX] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [latitudeShared, setLatitude] = useState(null);
-  const [longitudeShared, setLongitude] = useState(null);
+  const [latitudeShared, setLatitudeShared] = useState(null);
+  const [longitudeShared, setLongitudeShared] = useState(null);
+  const [latitudeX, setLatitudeX] = useState(null);
+  const [longitudeX, setLongitudeX] = useState(null);
 
   const [selectedMethod, setSelectedMethod] = useState(null);
 
@@ -29,8 +32,8 @@ export default function Navbar() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLatitude(position.coords.latitude);
-          setLongitude(position.coords.longitude);
+          setLatitudeShared(position.coords.latitude);
+          setLongitudeShared(position.coords.longitude);
           toast.success('Shared!')
         },
         (error) => {
@@ -41,7 +44,6 @@ export default function Navbar() {
       alert("Geolocation is not supported by this browser.");
     }
   };
-
 
   const openDrawer = () => setOpen(true);
   const closeDrawer = () => setOpen(false);
@@ -79,6 +81,8 @@ export default function Navbar() {
           const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
           if (response.status === 200) {
             setUserInfo(response.data);
+            setLatitudeX(response.data.latitude);
+            setLongitudeX(response.data.longitude);
           } else {
             console.log(response.data);
           }
@@ -143,10 +147,54 @@ export default function Navbar() {
     navigate('/login');
   };
 
-  
-  const handleOrder=()=>{
+  const deleteItem = async (buyerId) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/carts/${buyerId}`);
+    } catch (error) {
+      console.error('Error removing item:', error);
+    }
+  };
+
+  const handleOrder = async () => {
+    const latitude = latitudeShared ?? latitudeX;
+    const longitude = longitudeShared ?? longitudeX;
+
+    if (!cartItems.length) {
+      toast.error("Cart is empty!");
+      return;
+    }
+
+    if (!selectedMethod) {
+      toast.error("Select Method");
+      return;
+    }
+
+    try {
+      const response = await axios.post(`http://localhost:5000/api/purchases/buy`, {
+        buyerId: userID,
+        sellerIds: cartItems.map(item => item.ownerId),
+        products: cartItems.map(item => item.productId),
+        quantity: cartItems.map(item => item.quantity),
+        price: cartItems.map(item => item.price),
+        latitude,
+        longitude,
+        buyType: selectedMethod,
+      });
+      if (response.status === 200) {
+        toast.success("Order Done!");
+        
+        deleteItem(userID);
+        const timeout = setTimeout(() => {
+          setOpenX(false);
+
+        }, 5000); 
     
-  }
+        return () => clearTimeout(timeout);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className='bg-[#ffffff] rounded-lg border border-[#d8d8d8] shadow-xl mb-2'>
@@ -176,7 +224,7 @@ export default function Navbar() {
                 <Menu>
                   <MenuHandler>
                     <Avatar
-                      src={`http://localhost:5000/uploads/${userInfo?.photo}`}
+                      src={userInfo?.photo}
                       alt="avatar"
                       withBorder={true}
                       color='green'
@@ -263,7 +311,7 @@ export default function Navbar() {
                   <Typography variant="h6">Total:</Typography>
                   <Typography variant="h6">৳{calculateTotal()}</Typography>
                 </div>
-                <Button size="sm" className="mt-4" fullWidth onClick={handleOpenX}>
+                <Button size="sm" className="mt-4 bg-[goldenrod]" fullWidth onClick={handleOpenX}>
                   Checkout
                 </Button>
               </div>
@@ -314,9 +362,10 @@ export default function Navbar() {
                               </CardBody>
                             </Card>
                           </div>
-                          <div className='flex justify-center'>
-                            <Button onClick={handleOrder} className='bg-[goldenrod]'>Confirm Order</Button>
+                          {selectedMethod && <div className='flex justify-center'>
+                                 <div onClick={handleOrder}><OrderButton /></div>
                           </div>
+}
                   </div>
 
             </div>

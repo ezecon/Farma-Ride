@@ -5,56 +5,47 @@ const Medicine = require('../models/Medicine');
 
 const router = express.Router();
 
-// Set up Multer storage
-const storage = multer.diskStorage({
-  destination: './uploads/',
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
-});
+const cloudinary = require('../Cloudinary.js');
 
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1000000 }, // 1MB limit
-  fileFilter: function (req, file, cb) {
-    const filetypes = /jpeg|jpg|png/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
 
-    if (mimetype && extname) {
-      return cb(null, true);
-    } else {
-      cb('Error: Images Only!');
-    }
-  }
-}).single('file');
+// Multer setup
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-// Route to add a new medicine
-router.post('/add-medicine', (req, res) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      res.status(400).send({ msg: err });
-    } else {
-      const { owner, medicineName, description, price, status } = req.body;
-      const filename = req.file ? req.file.filename : null;
 
-      const newMedicine = new Medicine({
-        owner,
-        medicineName,
-        description,
-        price,
-        status,
-        filename,
+router.post('/add-medicine', upload.single('photo'), async (req, res) => {
+  const { owner, medicineName, description, price, status } = req.body;
+  let photoUrl = null;
+
+  try {
+    // Upload photo to Cloudinary if present
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }).end(req.file.buffer);
       });
 
-      try {
-        await newMedicine.save();
-        res.send({ msg: 'Medicine added successfully', medicine: newMedicine });
-      } catch (err) {
-        res.status(500).send({ msg: 'Database error', err });
-      }
+      photoUrl = result.secure_url;
     }
-  });
+
+    // Create new medicine
+    const newMedicine = new Medicine({
+      owner,
+      medicineName,
+      description,
+      price,
+      status,
+      photo: photoUrl, // Store the Cloudinary URL
+    });
+
+    await newMedicine.save();
+    res.status(201).send({ msg: 'Medicine added successfully', medicine: newMedicine });
+  } catch (err) {
+    console.error('Error adding medicine:', err);
+    res.status(500).send({ msg: 'Database error', err });
+  }
 });
 
 
@@ -102,7 +93,7 @@ router.get('/', async (req, res) => {
     }
   });
   
-  router.put('/:id', upload, async (req, res) => {
+  /*router.put('/:id', upload, async (req, res) => {
     try {
       const { medicineName, description, price, status } = req.body;
       const filename = req.file ? req.file.filename : undefined;
@@ -128,7 +119,7 @@ router.get('/', async (req, res) => {
     } catch (err) {
       res.status(500).send({ msg: 'Database error', err });
     }
-  });
+  });*/
   
 // Export router
 module.exports = router;

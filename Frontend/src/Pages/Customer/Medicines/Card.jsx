@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useToken } from "../../../Components/Hook/useToken";
 import axios from "axios";
 export default function PhotoCard({ data }) {
-  const {_id, filename, medicineName, price}=data;
+  const {_id, filename, owner, medicineName, price}=data;
   const navigate = useNavigate();
   const { token, removeToken } = useToken();
   const [userID, setUserID] = useState(null);
@@ -42,6 +42,7 @@ export default function PhotoCard({ data }) {
     try {
       const response = await axios.post('http://localhost:5000/api/carts/add-cart', {
         buyerId: userID,
+        ownerId: owner,
         productId: _id,
         medicineName:medicineName,
         quantity: 1,
@@ -60,7 +61,7 @@ export default function PhotoCard({ data }) {
     <div className="relative w-72 h-96 overflow-hidden rounded-lg shadow-lg group">
       {/* Image */}
       <img
-        src={`http://localhost:5000/uploads/${filename}`} 
+        src={filename} 
         alt={medicineName}
         className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
       />

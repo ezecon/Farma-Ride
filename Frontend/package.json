@@ -19,6 +19,7 @@
     "axios": "^1.7.2",
     "emailjs-com": "^3.2.0",
     "firebase": "^10.11.1",
+    "gsap": "^3.12.5",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",

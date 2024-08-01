@@ -4,10 +4,11 @@ const Cart = require('../models/Cart');
 const router = express.Router();
 
 router.post('/add-cart', async (req, res) => {
-  const { buyerId, productId, medicineName, quantity, price, singlePrice } = req.body;
+  const { buyerId, ownerId, productId, medicineName, quantity, price, singlePrice } = req.body;
 
   const newCart = new Cart({
     buyerId,
+    ownerId,
     productId,
     medicineName,
     quantity,
@@ -73,6 +74,19 @@ router.delete('/delete/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const cartItem = await Cart.findByIdAndDelete(id);
+    if (!cartItem) {
+      return res.status(404).send({ msg: 'Item not found in cart' });
+    }
+    res.status(200).send({ msg: 'Item removed successfully' });
+  } catch (err) {
+    res.status(500).send({ msg: 'Database error', err });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const cartItem = await Cart.deleteMany({buyerId: id});
     if (!cartItem) {
       return res.status(404).send({ msg: 'Item not found in cart' });
     }

@@ -8,7 +8,7 @@ function Email() {
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.delete('http://localhost:5000/api/users/delete', {
+      const response = await axios.delete('https://farma-ride-server.vercel.app/api/users/delete', {
         data: { email },
       });
       setMessage(response.data.message);

@@ -24,7 +24,7 @@ export default function Farmacy() {
 
   return (
     <div>
-      <h1 className="montserrat-alternates-extrabold font-bold text-3xl text-center p-10 text-[goldenrod]">Farmacy Near You?</h1>
+      <h1 className="montserrat-alternates-extrabold font-bold text-3xl text-center p-10 text-[goldenrod]">Farmacy Locations:</h1>
       <div className="flex justify-center">
         <MapCard users={data} />
       </div>

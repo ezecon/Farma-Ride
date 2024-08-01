@@ -17,6 +17,7 @@ import CheckMedi from "../../Pages/FarmacyOwner/Inventory/CheckMedi";
 import Main_Farmacy from "../Farmacy/Main";
 import Main_Rider from "../Rider/Main";
 import Profile_Customer from "../../Pages/Customer/Profile/Profile";
+import { Dashboard_Customer } from "../../Pages/Customer/Dashboard/Dashboard";
 
 const router = createBrowserRouter([
     {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             {
                 path: "profile",
                 element: <Profile_Customer />
+            },
+            {
+                path: "dashboard",
+                element: <Dashboard_Customer />
             },
             {
                 path: "search",

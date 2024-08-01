@@ -17,12 +17,27 @@ export default function Verify({isCustomer, isRider, isOwner}) {
     
         if (verificationCode === code) {
             try {
-                const response = await axios.put('http://localhost:5000/api/users/verify', { email: userEmail });
+                const response = await axios.put('https://farma-ride-server.vercel.app/api/users/verify', { email: userEmail });
     
                 if (response.data.error) {
                     toast.error(response.data.error);
                 } else {
                     toast.success("Verification successful!");
+                    if(isCustomer){
+                        navigate('/verify/information-customer', {
+                            state: { userEmail: userEmail }
+                          });
+                      }
+                      else if(isRider){
+                        navigate('/verify/information-rider', {
+                            state: { userEmail: userEmail }
+                          });
+                      }
+                      else if(isOwner){
+                        navigate('/verify/information-farmacy-owner', {
+                            state: { userEmail: userEmail }
+                          });
+                      }
                 }
             } catch (error) {
                 if (error.response && error.response.data && error.response.data.error) {
@@ -41,7 +56,7 @@ export default function Verify({isCustomer, isRider, isOwner}) {
     useEffect(() => {
         const fetch = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/users/verify/${userEmail}`);
+                const response = await axios.get(`https://farma-ride-server.vercel.app/api/users/verify/${userEmail}`);
                 if (response.status === 200) {
                     console.log("data fetched");
                     setState(response.data.isVerified);

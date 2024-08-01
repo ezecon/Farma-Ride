@@ -21,13 +21,12 @@ export default function Medicines() {
         navigate('/login');
       }
       try {
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://farma-ride-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
           setOwner(userID)
-          console.log(response.data.decoded.id)
-          console.log(userID)
+
 
         } else {
           console.log("Token verification failed:", response.data);
@@ -45,7 +44,7 @@ export default function Medicines() {
   useEffect(() => {
     const fetchMedicines = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/medicines/owner/${owner}`);
+        const response = await axios.get(`https://farma-ride-server.vercel.app/api/medicines/owner/${owner}`);
         if (response.status === 200) {
           setData(response.data);
         }

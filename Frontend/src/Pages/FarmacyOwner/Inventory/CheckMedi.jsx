@@ -10,7 +10,7 @@ export default function CheckMedi() {
   useEffect(() => {
     const fetchMedicine = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/medicines/${id}`);
+        const response = await axios.get(`https://farma-ride-server.vercel.app/api/medicines/${id}`);
         if (response.status === 200) {
           setMedicine(response.data);
         }
@@ -48,7 +48,7 @@ export default function CheckMedi() {
       <div className=" bg-white lg:w-1/2 border border-[#dbdada] pl-5  shadow-lg rounded-lg flex flex-col justify-center items-center py-10">
         {medicine.filename && (
             <img 
-              src={`http://localhost:5000/uploads/${medicine.filename}`} 
+              src={medicine.filename} 
               alt={medicine.medicineName}
               className="p-5 mt-10 shadow rounded-lg"
             />

@@ -8,7 +8,7 @@ export default function Farmacy() {
   useEffect(() => {
     const mapFetch = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/users/farmacy');
+        const response = await axios.get('https://farma-ride-server.vercel.app/api/users/farmacy');
         if (response.status === 200) {
           console.log('Data fetched:', response.data); // Log fetched data
           setData(response.data);

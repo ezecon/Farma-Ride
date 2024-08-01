@@ -12,7 +12,7 @@ const cloudinary = require('../Cloudinary.js');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Create a user
+// Create a user 
 router.post('/register', async (req, res) => {
     const { name, email, password, number, role, verificationCode } = req.body;
 

@@ -1,16 +1,15 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import Card from "./Card";
-import axios from "axios";
 import { useToken } from "../../../Components/Hook/useToken";
 import { useNavigate } from "react-router-dom";
 
-export default function All() {
+export default function Near() {
   const [data, setData] = useState([]);
   const { token, removeToken } = useToken();
   const navigate = useNavigate();
   const [userID, setUserID] = useState(null);
-  const [ownerIDs, setOwnerIDs] = useState([]); // Changed to an array
-  const [userInfo, setUserInfo] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -43,7 +42,7 @@ export default function All() {
         try {
           const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
           if (response.status === 200) {
-            setUserInfo(response.data);
+            setUser(response.data);
           } else {
             console.log(response.data);
           }
@@ -53,22 +52,18 @@ export default function All() {
       }
     };
 
-    fetchUserInfo();
+    if (userID) {
+      fetchUserInfo();
+    }
   }, [userID]);
 
   useEffect(() => {
-    const OwnerFetch = async () => {
+    const mapFetch = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/users/farmacy');
         if (response.status === 200) {
           console.log('Data fetched:', response.data); // Log fetched data
-          
-          // Assuming `userInfo` contains the `upazilas` field
-          const filteredData = response.data.filter(item => userInfo && item.upazilas === userInfo.upazilas);
-          const ownerIDs = filteredData.map(item => item._id); // Extract owner IDs
-          
-          console.log('Filtered data:', filteredData); // Log filtered data
-          setOwnerIDs(ownerIDs);
+          setData(response.data);
         } else {
           console.log("404 - Not Found");
         }
@@ -76,47 +71,21 @@ export default function All() {
         console.log('Error:', err);
       }
     };
-
-    if (userInfo) {
-      OwnerFetch();
-    }
-  }, [userInfo]);
-
-  useEffect(() => {
-    const fetchMedicines = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/medicines');
-        if (response.status === 200) {
-          // Filter medicines where the owner is in the ownerIDs array
-          const filteredMedicines = response.data.filter(medicine => ownerIDs.includes(medicine.owner));
-          setData(filteredMedicines);
-        }
-      } catch (err) {
-        console.error('Error fetching medicines:', err);
-      }
-    };
-
-    if (ownerIDs.length > 0) {
-      fetchMedicines();
-    }
-  }, [ownerIDs]);
+    mapFetch();
+  }, []);
 
   return (
-    <div className="py-10 px-4 sm:px-6 lg:px-8">
-      <h1 className="montserrat-alternates-extrabold text-center text-2xl text-[goldenrod] mb-6">
-        MEDICINES
+    <div>
+      <h1 className="montserrat-alternates-extrabold font-bold text-3xl text-center p-10 text-[goldenrod]">
+        Farmacy Near You?
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {data.map((item, index) => (
-          <Card key={index} data={item} />
-        ))}
-        
+      <div className="flex justify-center flex-wrap gap-4">
+        {data
+          .filter(item => user && item.upazilas === user.upazilas)
+          .map((item) => (
+            <Card key={item._id} data={item} /> // Assuming each item has a unique `_id`
+          ))}
       </div>
-      {
-        data===null && <>
-        <p className="montserrat-alternates-light text-center">Empty!</p>
-        </>
-      }
     </div>
   );
 }

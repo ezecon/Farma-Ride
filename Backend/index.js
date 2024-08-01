@@ -17,10 +17,7 @@ mongoose.connect('mongodb+srv://mdeconozzama:rboEBf8GIcHBkN0x@cluster0.efsb2yz.m
 }).then(() => console.log('MongoDB connected'))
 .catch(err => console.log(err));
 
-// Routes
-app.use('/',(req,res)=>{
-    res.send("api working")
-})
+
 app.use('/api/users', require('./routes/users.js'));
 app.use('/api/users/login', require('./Verification/Auth.js'));
 app.use('/api/medicines', require('./routes/medicines.js'));

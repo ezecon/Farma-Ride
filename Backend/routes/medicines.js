@@ -11,9 +11,9 @@ const cloudinary = require('../Cloudinary.js');
 // Multer setup
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+  
 
-
-router.post('/add-medicine', upload.single('photo'), async (req, res) => {
+router.post('/add-medicine', upload.single('file'), async (req, res) => {
   const { owner, medicineName, description, price, status } = req.body;
   let photoUrl = null;
 
@@ -37,7 +37,7 @@ router.post('/add-medicine', upload.single('photo'), async (req, res) => {
       description,
       price,
       status,
-      photo: photoUrl, // Store the Cloudinary URL
+      filename: photoUrl, // Store the Cloudinary URL
     });
 
     await newMedicine.save();
@@ -93,10 +93,10 @@ router.get('/', async (req, res) => {
     }
   });
   
-  /*router.put('/:id', upload, async (req, res) => {
+  router.put('/:id', upload.single('photo'), async (req, res) => {
     try {
       const { medicineName, description, price, status } = req.body;
-      const filename = req.file ? req.file.filename : undefined;
+      let photoUrl = null;
   
       // Find the medicine by ID
       const medicine = await Medicine.findById(req.params.id);
@@ -104,22 +104,36 @@ router.get('/', async (req, res) => {
         return res.status(404).send({ msg: 'Medicine not found' });
       }
   
+      // Upload photo to Cloudinary if present
+      if (req.file) {
+        const result = await new Promise((resolve, reject) => {
+          cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }).end(req.file.buffer);
+        });
+  
+        photoUrl = result.secure_url;
+      }
+  
       // Update medicine details
       medicine.medicineName = medicineName || medicine.medicineName;
       medicine.description = description || medicine.description;
       medicine.price = price || medicine.price;
       medicine.status = status || medicine.status;
-      if (filename) {
-        medicine.filename = filename;
+      if (photoUrl) {
+        medicine.filename = photoUrl; // Ensure the field name is correct
       }
   
       // Save updated medicine
       await medicine.save();
       res.send({ msg: 'Medicine updated successfully', medicine });
     } catch (err) {
+      console.error('Database error:', err);
       res.status(500).send({ msg: 'Database error', err });
     }
-  });*/
+  });
+  
   
 // Export router
 module.exports = router;

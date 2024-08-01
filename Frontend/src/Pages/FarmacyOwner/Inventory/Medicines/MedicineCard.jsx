@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
 import { Dialog, DialogPanel, DialogTitle, Description } from '@headlessui/react';
+import { LineWave } from "react-loader-spinner";
+import toast from "react-hot-toast";
 
 export default function MedicineCard({ data }) {
   const { _id, medicineName, price, filename, description: initialDescription, status: initialStatus } = data;
@@ -14,11 +16,12 @@ export default function MedicineCard({ data }) {
   const [priceX, setPrice] = useState(price);
   const [status, setStatus] = useState(initialStatus);
   const [file, setFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getItem = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/medicines/${_id}`);
+        const response = await axios.get(`https://farma-ride-server.vercel.app/api/medicines/${_id}`);
         if (response.status === 200) {
           setItemDetails(response.data);
         } else {
@@ -37,36 +40,59 @@ export default function MedicineCard({ data }) {
   };
 
   const handleUpdate = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+  e.preventDefault(); // Prevent default form submission
+  
+  setIsLoading(true);
 
-    const formData = new FormData();
-    formData.append('medicineName', medicine);
-    formData.append('description', description);
-    formData.append('price', priceX);
-    formData.append('status', status);
-    if (file) {
-      formData.append('file', file);
-    }
+  const formData = new FormData();
+  formData.append('medicineName', medicine);
+  formData.append('description', description);
+  formData.append('price', priceX);
+  formData.append('status', status);
+  if (file) {
+    formData.append('photo', file); // Ensure the key matches the backend
+  }
 
-    try {
-      const response = await axios.put(`http://localhost:5000/api/medicines/${_id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      if (response.status === 200) {
-        setIsOpen(false); // Close dialog
-        // Optionally refresh the page or update the state
-        window.location.reload();
+  try {
+    const response = await axios.put(`https://farma-ride-server.vercel.app/api/medicines/${_id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
       }
-    } catch (error) {
-      console.error('Error updating medicine:', error);
+    });
+    if (response.status === 200) {
+      setIsOpen(false); // Close dialog
+      toast.success("Updated!")
     }
-  };
+  } catch (error) {
+    console.error('Error updating medicine:', error);
+    toast.error(error)
+  }finally {
+    setIsLoading(false); // End loading
+  }
+};
+if (isLoading) {
+  return (
+    <div className="flex flex-col justify-center items-center">
+      <LineWave
+        visible={true}
+        height="100"
+        width="100"
+        color="#4fa94d"
+        ariaLabel="line-wave-loading"
+        wrapperStyle={{}}
+        wrapperClass=""
+        firstLineColor=""
+        middleLineColor=""
+        lastLineColor=""
+      />
+      <p className='text-[goldenrod] font-bold'>Uploading..</p>
+    </div>
+  );
+}
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/medicines/${id}`);
+      const response = await axios.delete(`https://farma-ride-server.vercel.app/api/medicines/${id}`);
       if (response.status === 200) {
         window.location.reload(); 
       }
@@ -79,7 +105,7 @@ export default function MedicineCard({ data }) {
     <div className="border rounded-lg">
       {filename && (
         <img 
-          src={`http://localhost:5000/uploads/${filename}`} 
+          src={filename} 
           alt={medicineName}
           className="w-[300px] h-[280px] object-cover cursor-pointer"
         />

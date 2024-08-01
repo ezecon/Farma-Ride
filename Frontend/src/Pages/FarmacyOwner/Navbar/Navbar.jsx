@@ -8,6 +8,7 @@ import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useToken } from '../../../Components/Hook/useToken';
+import { LineWave } from 'react-loader-spinner';
 
 export default function Navbar() {
   let [isOpen, setIsOpen] = useState(false)
@@ -21,6 +22,7 @@ export default function Navbar() {
   const [userID, setUserID] = useState(null);
   const [owner, setOwner] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -29,7 +31,7 @@ export default function Navbar() {
         navigate('/login');
       }
       try {
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://farma-ride-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
@@ -55,7 +57,7 @@ export default function Navbar() {
 
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
+        const response = await axios.get(`https://farma-ride-server.vercel.app/api/users/${userID}`);
         if (response.status === 200) {
           setUserInfo(response.data);
         } else {
@@ -67,8 +69,9 @@ export default function Navbar() {
     };
     fetchUserInfo();
   }, [userID]);
-
+ 
   const handleAdd = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     const formData = new FormData();
     formData.append('owner', owner);
@@ -79,7 +82,7 @@ export default function Navbar() {
     formData.append('file', file);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/medicines/add-medicine', formData, {
+      const res = await axios.post('https://farma-ride-server.vercel.app/api/medicines/add-medicine', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -89,8 +92,30 @@ export default function Navbar() {
     } catch (err) {
       console.error('Error adding medicine:', err);
       toast.error("Medicine Not Added. Something wents wrong.")
+    }finally {
+      setIsLoading(false); // End loading
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col justify-center items-center">
+        <LineWave
+          visible={true}
+          height="100"
+          width="100"
+          color="#4fa94d"
+          ariaLabel="line-wave-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          firstLineColor=""
+          middleLineColor=""
+          lastLineColor=""
+        />
+        <p className='text-[goldenrod] font-bold'>Uploading..</p>
+      </div>
+    );
+  }
 
   const handleLogout = () => {
     removeToken();
@@ -127,7 +152,7 @@ export default function Navbar() {
                       <Menu>
                             <MenuHandler>
                             <Avatar 
-                                  src={`http://localhost:5000/uploads/${userInfo?.photo}`}
+                                  src={userInfo?.photo}
                                     alt="avatar"
                                     withBorder={true}
                                     color='green'

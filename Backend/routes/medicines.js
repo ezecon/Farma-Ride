@@ -81,6 +81,8 @@ router.get('/', async (req, res) => {
       res.status(500).send({ msg: 'Database error', err });
     }
   });
+
+  
   router.delete('/:id', async (req, res) => {
     try {
       const medicine = await Medicine.findByIdAndDelete(req.params.id);

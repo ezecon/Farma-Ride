@@ -34,14 +34,14 @@ router.get('/:id', async (req, res) => {
     if (!medicine) {
       return res.status(404).send({ msg: 'Medicine not found' });
     }
-    res.json(medicine);
+    res.status(200).json(medicine);
   } catch (err) {
     res.status(500).send({ msg: 'Database error', err });
   }
 });
-router.get('/user/:userId', async (req, res) => {
+router.get('/user/:userID', async (req, res) => {
   try {
-    const purchases = await Purchase.find({ buyerId: req.params.userId });
+    const purchases = await Purchase.find({ buyerId: req.params.userID });
     if (purchases.length === 0) {
       return res.status(404).send({ msg: 'No purchases found for this user' });
     }

@@ -133,7 +133,9 @@ export default function Requests() {
     <div className="container mx-auto p-4">
       <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">REQUESTS</h1>
       <div>
-        {purchases.map((purchase) => (
+        {purchases
+        .filter(purchase=>purchase.status==="Pending")
+        .map((purchase) => (
           <div key={purchase._id} >
 
             {/* Group items by owner */}

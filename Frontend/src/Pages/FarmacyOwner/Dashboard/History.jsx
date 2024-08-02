@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
-export default function History() {
+export default function Requests() {
   const [purchases, setPurchases] = useState([]);
   const [medicines, setMedicines] = useState([]);
   const [owners, setOwners] = useState({}); // State to store owner names
@@ -90,46 +90,60 @@ export default function History() {
     fetchData();
   }, [userID]);
 
-  // Group items by their owners within each purchase
-  const groupItemsByOwner = (products) => {
-    return products.reduce((acc, productId) => {
+  // Group items by their owners within each purchase, including counts and total price
+  const groupItemsByOwner = (products, quantities) => {
+    return products.reduce((acc, productId, index) => {
       const medicine = medicines.find(med => med._id === productId);
-      const owner = medicine ? medicine.owner : 'Unknown';
-      if (!acc[owner]) {
-        acc[owner] = [];
+      if (medicine && medicine.owner === userID) {
+        const owner = medicine.owner;
+        const medicineName = medicine.medicineName;
+        const quantity = quantities[index];
+        const price = medicine.price;
+
+        if (!acc[owner]) {
+          acc[owner] = { items: {}, total: 0 };
+        }
+        if (!acc[owner].items[medicineName]) {
+          acc[owner].items[medicineName] = { count: 0, totalPrice: 0 };
+        }
+        acc[owner].items[medicineName].count += quantity;
+        acc[owner].items[medicineName].totalPrice += price * quantity;
+        acc[owner].total += price * quantity;
       }
-      acc[owner].push(medicine ? medicine.medicineName : 'Unknown');
+
       return acc;
     }, {});
   };
+
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">HISTORY</h1>
       <div>
         {purchases
-        .filter(purchase=>purchase.status==="Deliverd")
+        .filter(purchase=>purchase.status!=="Pending")
         .map((purchase) => (
-          <div key={purchase._id} className="mb-5 p-4 border border-gray-200 rounded-lg shadow-lg montserrat-alternates-light">
-            <h2 className=" font-bold mb-2">Purchase ID: {purchase._id}</h2>
-            <p className="text-black mb-2">Date: {new Date(purchase.date).toLocaleDateString()}</p>
-            <p className="font-semibold mb-2">Total: {purchase.price.reduce((acc, curr) => acc + curr, 0).toFixed(2)}</p>
+          <div key={purchase._id} >
+            
 
-            {/* Group items by owner */}
-            {Object.keys(groupItemsByOwner(purchase.products)).map((ownerId) => (
-              <div key={ownerId} className="mb-3">
+            {Object.keys(groupItemsByOwner(purchase.products, purchase.quantity)).map((ownerId) => (
+              <div key={ownerId} className="mb-5 p-4 border border-gray-200 rounded-lg shadow-lg montserrat-alternates-light">
+              <h2 className="font-bold mb-2">Purchase ID: {purchase._id}</h2>
+              <p className="text-black mb-2">Date: {new Date(purchase.date).toLocaleDateString()}</p>
                 <h3 className="text-lg font-semibold">Owner: {owners[ownerId] || 'Unknown'}</h3>
                 <ul className="list-disc pl-5">
-                  {groupItemsByOwner(purchase.products)[ownerId].map((item, index) => (
-                    <li key={index} className="text-black">{item}</li>
+                  {Object.entries(groupItemsByOwner(purchase.products, purchase.quantity)[ownerId].items).map(([medicineName, { count, totalPrice }]) => (
+                    <li key={medicineName} className="text-black">{medicineName} (x{count}) - Total: ${totalPrice.toFixed(2)}</li>
                   ))}
                 </ul>
+                <p className="font-semibold mb-2">Total: ${groupItemsByOwner(purchase.products, purchase.quantity)[ownerId].total.toFixed(2)}</p>
+                <p>Status: {purchase.status}</p>
               </div>
             ))}
-            <p>Status: {purchase.status}</p>
+            
           </div>
         ))}
       </div>
     </div>
   );
-}                          
+}

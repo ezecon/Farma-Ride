@@ -55,20 +55,19 @@ router.get('/user/:userID', async (req, res) => {
 
 
 router.put('/update/:id', async (req, res) => {
-  const { quantity, price } = req.body;
   try {
-    const cartItem = await Cart.findById(req.params.id);
+    const cartItem = await Purchase.findById(req.params.id);
     if (!cartItem) {
-      return res.status(404).send({ msg: 'Item not found in cart' });
+      return res.status(404).send({ msg: 'Cart item not found' });
     }
-    cartItem.quantity = quantity;
-    cartItem.price = price;
+    cartItem.status = "Accepted!";
     await cartItem.save();
-    res.send({ msg: 'Quantity updated successfully', cartItem });
+    res.status(200).send({ msg: 'Quantity updated successfully', cartItem });
   } catch (err) {
     res.status(500).send({ msg: 'Database error', err });
   }
 });
+
 
 
 module.exports = router;

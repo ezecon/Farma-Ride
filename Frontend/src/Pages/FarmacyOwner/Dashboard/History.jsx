@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
-export default function Requests() {
+export default function History() {
   const [purchases, setPurchases] = useState([]);
   const [medicines, setMedicines] = useState([]);
   const [owners, setOwners] = useState({}); // State to store owner names
@@ -90,43 +90,38 @@ export default function Requests() {
     fetchData();
   }, [userID]);
 
-  // Group items by their owners within each purchase, including counts
-  const groupItemsByOwner = (products, quantities) => {
-    return products.reduce((acc, productId, index) => {
+  // Group items by their owners within each purchase
+  const groupItemsByOwner = (products) => {
+    return products.reduce((acc, productId) => {
       const medicine = medicines.find(med => med._id === productId);
       const owner = medicine ? medicine.owner : 'Unknown';
-      const medicineName = medicine ? medicine.medicineName : 'Unknown';
-      const quantity = quantities[index];
-
       if (!acc[owner]) {
-        acc[owner] = {};
+        acc[owner] = [];
       }
-      if (!acc[owner][medicineName]) {
-        acc[owner][medicineName] = 0;
-      }
-      acc[owner][medicineName] += quantity;
-
+      acc[owner].push(medicine ? medicine.medicineName : 'Unknown');
       return acc;
     }, {});
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">REQUESTS</h1>
+      <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">HISTORY</h1>
       <div>
-        {purchases.map((purchase) => (
+        {purchases
+        .filter(purchase=>purchase.status==="Deliverd")
+        .map((purchase) => (
           <div key={purchase._id} className="mb-5 p-4 border border-gray-200 rounded-lg shadow-lg montserrat-alternates-light">
-            <h2 className="font-bold mb-2">Purchase ID: {purchase._id}</h2>
+            <h2 className=" font-bold mb-2">Purchase ID: {purchase._id}</h2>
             <p className="text-black mb-2">Date: {new Date(purchase.date).toLocaleDateString()}</p>
             <p className="font-semibold mb-2">Total: {purchase.price.reduce((acc, curr) => acc + curr, 0).toFixed(2)}</p>
 
             {/* Group items by owner */}
-            {Object.keys(groupItemsByOwner(purchase.products, purchase.quantity)).map((ownerId) => (
+            {Object.keys(groupItemsByOwner(purchase.products)).map((ownerId) => (
               <div key={ownerId} className="mb-3">
                 <h3 className="text-lg font-semibold">Owner: {owners[ownerId] || 'Unknown'}</h3>
                 <ul className="list-disc pl-5">
-                  {Object.entries(groupItemsByOwner(purchase.products, purchase.quantity)[ownerId]).map(([medicineName, count]) => (
-                    <li key={medicineName} className="text-black">{medicineName} (x{count})</li>
+                  {groupItemsByOwner(purchase.products)[ownerId].map((item, index) => (
+                    <li key={index} className="text-black">{item}</li>
                   ))}
                 </ul>
               </div>
@@ -137,4 +132,4 @@ export default function Requests() {
       </div>
     </div>
   );
-}
+}                          

@@ -90,48 +90,69 @@ export default function Requests() {
     fetchData();
   }, [userID]);
 
-  // Group items by their owners within each purchase, including counts
+  // Group items by their owners within each purchase, including counts and total price
   const groupItemsByOwner = (products, quantities) => {
     return products.reduce((acc, productId, index) => {
       const medicine = medicines.find(med => med._id === productId);
-      const owner = medicine ? medicine.owner : 'Unknown';
-      const medicineName = medicine ? medicine.medicineName : 'Unknown';
-      const quantity = quantities[index];
+      if (medicine && medicine.owner === userID) {
+        const owner = medicine.owner;
+        const medicineName = medicine.medicineName;
+        const quantity = quantities[index];
+        const price = medicine.price;
 
-      if (!acc[owner]) {
-        acc[owner] = {};
+        if (!acc[owner]) {
+          acc[owner] = { items: {}, total: 0 };
+        }
+        if (!acc[owner].items[medicineName]) {
+          acc[owner].items[medicineName] = { count: 0, totalPrice: 0 };
+        }
+        acc[owner].items[medicineName].count += quantity;
+        acc[owner].items[medicineName].totalPrice += price * quantity;
+        acc[owner].total += price * quantity;
       }
-      if (!acc[owner][medicineName]) {
-        acc[owner][medicineName] = 0;
-      }
-      acc[owner][medicineName] += quantity;
 
       return acc;
     }, {});
   };
+  const handleStatus = async (id) => {
+    try {
+      const response = await axios.put(`https://farma-ride-server.vercel.app/api/purchases/update/${id}`, { status: "Accepted" });
+      if (response.status === 200) {
+        toast.success("Accepted");
+      } else {
+        toast.error("Failed to update status");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while updating status");
+    }
+  }
+  
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">REQUESTS</h1>
       <div>
         {purchases.map((purchase) => (
-          <div key={purchase._id} className="mb-5 p-4 border border-gray-200 rounded-lg shadow-lg montserrat-alternates-light">
-            <h2 className="font-bold mb-2">Purchase ID: {purchase._id}</h2>
-            <p className="text-black mb-2">Date: {new Date(purchase.date).toLocaleDateString()}</p>
-            <p className="font-semibold mb-2">Total: {purchase.price.reduce((acc, curr) => acc + curr, 0).toFixed(2)}</p>
+          <div key={purchase._id} >
 
             {/* Group items by owner */}
             {Object.keys(groupItemsByOwner(purchase.products, purchase.quantity)).map((ownerId) => (
-              <div key={ownerId} className="mb-3">
+              <div key={ownerId} className="mb-5 p-4 border border-gray-200 rounded-lg shadow-lg montserrat-alternates-light">
+              <h2 className="font-bold mb-2">Purchase ID: {purchase._id}</h2>
+              <p className="text-black mb-2">Date: {new Date(purchase.date).toLocaleDateString()}</p>
                 <h3 className="text-lg font-semibold">Owner: {owners[ownerId] || 'Unknown'}</h3>
                 <ul className="list-disc pl-5">
-                  {Object.entries(groupItemsByOwner(purchase.products, purchase.quantity)[ownerId]).map(([medicineName, count]) => (
-                    <li key={medicineName} className="text-black">{medicineName} (x{count})</li>
+                  {Object.entries(groupItemsByOwner(purchase.products, purchase.quantity)[ownerId].items).map(([medicineName, { count, totalPrice }]) => (
+                    <li key={medicineName} className="text-black">{medicineName} (x{count}) - Total: ${totalPrice.toFixed(2)}</li>
                   ))}
                 </ul>
+                <p className="font-semibold mb-2">Total: ${groupItemsByOwner(purchase.products, purchase.quantity)[ownerId].total.toFixed(2)}</p>
+                <p>Status: {purchase.status}</p>
+                {purchase.status === 'Pending' && <button onClick={()=>handleStatus(purchase._id)} className='bg-black text-white font-bold p-2 rounded'>Accept</button>}
               </div>
             ))}
-            <p>Status: {purchase.status}</p>
+            
           </div>
         ))}
       </div>

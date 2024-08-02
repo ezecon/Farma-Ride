@@ -161,7 +161,7 @@ export default function Navbar() {
                             </MenuHandler>
                             <MenuList>
                               <Link to="/profile"><MenuItem className='font-mono'>Profile</MenuItem></Link>
-                              <Link to="/dashboard"><MenuItem className='font-mono'>Dashboard</MenuItem></Link>
+                              <Link to="/farmacy-owner/dashboard"><MenuItem className='font-mono'>Dashboard</MenuItem></Link>
                               <MenuItem onClick={handleLogout} className='font-mono'>Logout</MenuItem>
                             </MenuList>  
                     </Menu>

@@ -105,7 +105,7 @@ export default function History() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">REQUESTS</h1>
+      <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">HISTORY</h1>
       <div>
         {purchases
         .filter(purchase=>purchase.status==="Deliverd")

@@ -7,7 +7,6 @@ import { toast } from 'react-hot-toast';
 export default function Requests() {
   const [purchases, setPurchases] = useState([]);
   const [medicines, setMedicines] = useState([]);
-  const [owners, setOwners] = useState({}); // State to store owner names
   const { token, removeToken } = useToken();
   const navigate = useNavigate();
   const [userID, setUserID] = useState(null);
@@ -54,33 +53,6 @@ export default function Requests() {
         } else {
           toast.error('Error fetching medicines');
         }
-
-        // Fetch owner names
-        const ownerIds = new Set(purchasesResponse.data.flatMap(purchase => purchase.products.map(productId => {
-          const medicine = medicinesResponse.data.find(med => med._id === productId);
-          return medicine ? medicine.owner : null;
-        })));
-
-        const ownerPromises = Array.from(ownerIds).map(async (id) => {
-          if (id) {
-            try {
-              const response = await axios.get(`https://farma-ride-server.vercel.app/api/users/${id}`);
-              return { id, name: response.data.name };
-            } catch (error) {
-              console.error(`Error fetching owner ${id}:`, error);
-              return { id, name: 'Unknown' };
-            }
-          }
-        });
-
-        const ownerResults = await Promise.all(ownerPromises);
-        const ownerMap = ownerResults.reduce((acc, { id, name }) => {
-          acc[id] = name;
-          return acc;
-        }, {});
-
-        setOwners(ownerMap);
-
       } catch (error) {
         console.error('Error fetching data:', error);
         toast.error('Error fetching data');
@@ -114,20 +86,34 @@ export default function Requests() {
             <p className="font-semibold mb-2">Total: {purchase.price.reduce((acc, curr) => acc + curr, 0).toFixed(2)}</p>
 
             {/* Group items by owner */}
-            {Object.keys(groupItemsByOwner(purchase.products)).map((ownerId) => (
-              <div key={ownerId} className="mb-3">
-                <h3 className="text-lg font-semibold">Owner: {owners[ownerId] || 'Unknown'}</h3>
+            {Object.keys(groupItemsByOwner(purchase.products)).map((owner) => (
+              <div key={owner} className="mb-3">
+                <h3 className="text-lg font-semibold">Owner: {owner}</h3>
                 <ul className="list-disc pl-5">
-                  {groupItemsByOwner(purchase.products)[ownerId].map((item, index) => (
+                  {groupItemsByOwner(purchase.products)[owner].map((item, index) => (
                     <li key={index} className="text-black">{item}</li>
                   ))}
                 </ul>
               </div>
             ))}
-            <p>Status: {purchase.status}</p>
+            <p>Status:{purchase.status}</p>
           </div>
         ))}
       </div>
     </div>
   );
-}                          
+}
+const findOwner = async (id)=>{
+  try {
+    const purchasesResponse = await axios.get(`https://farma-ride-server.vercel.app/api/users/${id}`);
+    if (purchasesResponse.status === 200) {
+      const info = purchasesResponse.data.name;
+      return info
+    } else {
+      toast.error('Error fetching purchases');
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    toast.error('Error fetching data');
+  }
+}

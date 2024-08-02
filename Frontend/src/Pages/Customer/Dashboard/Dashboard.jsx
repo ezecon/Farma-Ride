@@ -6,6 +6,7 @@ import {
     Tab,
     TabPanel,
   } from "@material-tailwind/react";
+import Requests from "./Requests";
 
   export function Dashboard_Customer() {
     const [activeTab, setActiveTab] = useState("History");
@@ -20,8 +21,7 @@ import {
       {
         label: "REQUEST",
         value: "Req",
-        desc: `Because it's about motivating the doers. Because I'm here
-        to follow my dreams and inspire other people to follow their dreams, too.`,
+        desc: <Requests/>,
       },
     ];
     return (

@@ -10,7 +10,7 @@ router.post('/buy', async (req, res) => {
         buyerId, sellerIds, products, quantity, price, latitude, longitude, buyType
     });
 
-    try {
+    try { 
         await newPurchase.save();
         res.status(200).send({ msg: 'Added to purchase successfully', cart: newPurchase });
     } catch (err) {
@@ -31,6 +31,17 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const medicine = await Cart.findById(req.params.id);
+    if (!medicine) {
+      return res.status(404).send({ msg: 'Medicine not found' });
+    }
+    res.json(medicine);
+  } catch (err) {
+    res.status(500).send({ msg: 'Database error', err });
+  }
+});
+router.get('/user/:userId', async (req, res) => {
+  try {
+    const medicine = await Cart.find({buyerId: req.params.userId});
     if (!medicine) {
       return res.status(404).send({ msg: 'Medicine not found' });
     }

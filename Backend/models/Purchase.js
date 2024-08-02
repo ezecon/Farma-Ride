@@ -12,7 +12,7 @@ const purchaseSchema = new mongoose.Schema({
     products: { 
         type: [String], 
         required: true 
-    },
+    }, 
     latitude:{
         type: String,
     },

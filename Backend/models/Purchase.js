@@ -25,7 +25,7 @@ const purchaseSchema = new mongoose.Schema({
     },
     status:{
         type: String,
-        default: "Pending",
+        default: "Deliverd",
     },
     price:{
         type: [Number],

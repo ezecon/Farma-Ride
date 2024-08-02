@@ -7,6 +7,7 @@ import {
     TabPanel,
   } from "@material-tailwind/react";
 import Requests from "./Requests";
+import History from "./History";
 
   export function Dashboard_Customer() {
     const [activeTab, setActiveTab] = useState("History");
@@ -14,9 +15,7 @@ import Requests from "./Requests";
       {
         label: "HISTORY",
         value: "History",
-        desc: `It really matters and then like it really doesn't matter.
-        What matters is the people who are sparked by it. And the people 
-        who are like offended by it, it doesn't matter.`,
+        desc: <History/>,
       },
       {
         label: "REQUEST",

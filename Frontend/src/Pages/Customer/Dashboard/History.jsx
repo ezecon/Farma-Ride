@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
-export default function Requests() {
+export default function History() {
   const [purchases, setPurchases] = useState([]);
   const [medicines, setMedicines] = useState([]);
   const [owners, setOwners] = useState({}); // State to store owner names
@@ -107,7 +107,9 @@ export default function Requests() {
     <div className="container mx-auto p-4">
       <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">REQUESTS</h1>
       <div>
-        {purchases.map((purchase) => (
+        {purchases
+        .filter(purchase=>purchase.status==="Deliverd")
+        .map((purchase) => (
           <div key={purchase._id} className="mb-5 p-4 border border-gray-200 rounded-lg shadow-lg montserrat-alternates-light">
             <h2 className=" font-bold mb-2">Purchase ID: {purchase._id}</h2>
             <p className="text-black mb-2">Date: {new Date(purchase.date).toLocaleDateString()}</p>

@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const medicine = await Cart.findById(req.params.id);
+    const medicine = await Purchase.findById(req.params.id);
     if (!medicine) {
       return res.status(404).send({ msg: 'Medicine not found' });
     }
@@ -41,15 +41,16 @@ router.get('/:id', async (req, res) => {
 });
 router.get('/user/:userId', async (req, res) => {
   try {
-    const medicine = await Purchase.find({buyerId: req.params.userId});
-    if (!medicine) {
-      return res.status(404).send({ msg: 'Medicine not found' });
+    const purchases = await Purchase.find({ buyerId: req.params.userId });
+    if (purchases.length === 0) {
+      return res.status(404).send({ msg: 'No purchases found for this user' });
     }
-    res.json(medicine);
+    res.json(purchases);
   } catch (err) {
     res.status(500).send({ msg: 'Database error', err });
   }
 });
+
 
 
 

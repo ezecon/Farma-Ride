@@ -41,7 +41,7 @@ router.get('/:id', async (req, res) => {
 });
 router.get('/user/:userId', async (req, res) => {
   try {
-    const medicine = await Cart.find({buyerId: req.params.userId});
+    const medicine = await Purchase.find({buyerId: req.params.userId});
     if (!medicine) {
       return res.status(404).send({ msg: 'Medicine not found' });
     }

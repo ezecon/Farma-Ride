@@ -23,6 +23,10 @@ const purchaseSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    status:{
+        type: String,
+        default: "Pending",
+    },
     price:{
         type: [Number],
         required: true

@@ -4,26 +4,15 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet-routing-machine';
 
-// URL to a red marker icon image
-const redMarkerIconUrl = 'https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png';
-
 const WayToCustomer = ({ destination }) => {
   const mapRef = useRef(null);
   const markerRef = useRef(null);
-  const routingRef = useRef(null);
   const [map, setMap] = useState(null);
 
   useEffect(() => {
-    if (!destination) return; // Ensure destination is available before proceeding
-
-    if (map && markerRef.current) {
-      // Remove previous routing control if it exists
-      if (routingRef.current) {
-        routingRef.current.remove();
-      }
-
-      // Calculate new route
-      routingRef.current = L.Routing.control({
+    if (destination && map) {
+      // Recalculate route when destination or map changes
+      L.Routing.control({
         waypoints: [
           L.latLng(markerRef.current.getLatLng()),
           L.latLng(destination.lat, destination.lng),
@@ -42,12 +31,9 @@ const WayToCustomer = ({ destination }) => {
         maxZoom: 18,
       }).addTo(newMap);
 
-      const redIcon = L.icon({
-        iconUrl: redMarkerIconUrl,
-        iconSize: [40, 40], // Adjust size if necessary
-      });
+  
 
-      markerRef.current = L.marker([latitude, longitude], { icon: redIcon }).addTo(newMap);
+      markerRef.current = L.marker([latitude, longitude], ).addTo(newMap);
       setMap(newMap);
 
       const watchId = navigator.geolocation.watchPosition(
@@ -56,15 +42,11 @@ const WayToCustomer = ({ destination }) => {
           const newLatLng = [latitude, longitude];
 
           markerRef.current.setLatLng(newLatLng);
-          newMap.setView(newLatLng);
+          newMap.setView(newLatLng, 11);
 
-          // Update route if destination is available
+          // Update route
           if (destination) {
-            if (routingRef.current) {
-              routingRef.current.remove();
-            }
-
-            routingRef.current = L.Routing.control({
+            L.Routing.control({
               waypoints: [
                 L.latLng(newLatLng),
                 L.latLng(destination.lat, destination.lng),

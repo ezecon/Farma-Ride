@@ -211,7 +211,7 @@ export default function Requests() {
                 >
                   <DialogHeader>Location: {owners[ownerId]}</DialogHeader>
                   <DialogBody>
-                  <WayToCustomer destination={{ lat: 22.865510, lng: 91.0884894 }} />
+                  <WayToCustomer destination={purchase.buyerId} />
 
                   </DialogBody>
                 </Dialog>

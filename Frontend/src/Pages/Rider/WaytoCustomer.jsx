@@ -3,56 +3,74 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet-routing-machine';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const WayToCustomer = ({ destination }) => {
   const mapRef = useRef(null);
   const markerRef = useRef(null);
-  const [map, setMap] = useState(null);
+  const routingControlRef = useRef(null);
+  const [mapInitialized, setMapInitialized] = useState(false);
+  const [dest, setDest] = useState(false);
 
-  useEffect(() => {
-    if (destination && map) {
-      // Recalculate route when destination or map changes
-      L.Routing.control({
-        waypoints: [
-          L.latLng(markerRef.current.getLatLng()),
-          L.latLng(destination.lat, destination.lng),
-        ],
-        routeWhileDragging: true,
-      }).addTo(map);
-    }
-  }, [destination, map]);
-
+  useEffect(()=>{
+    const fetchData = async () => {
+    try {
+      const purchasesResponse = await axios.get(`https://farma-ride-server.vercel.app/api/purchases/dest1/${destination}`);
+      if (purchasesResponse.status === 200) {
+        setDest(purchasesResponse.data);
+        console.log(dest)
+      } else {
+        toast.error('Error fetching purchases');
+      }
+    }catch(err){
+        console.log(err)
+      }
+  }
+  fetchData()
+  })
   useEffect(() => {
     const initializeMap = (latitude, longitude) => {
-      const newMap = L.map(mapRef.current).setView([latitude, longitude], 11);
+      const map = L.map(mapRef.current).setView([latitude, longitude], 11);
 
       L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: 'Leaflet &copy; OpenStreetMap contributors',
         maxZoom: 18,
-      }).addTo(newMap);
+      }).addTo(map);
 
-  
+      const taxiIcon = L.icon({
+        iconUrl: 'taxi.png',
+        iconSize: [70, 70],
+      });
 
-      markerRef.current = L.marker([latitude, longitude], ).addTo(newMap);
-      setMap(newMap);
+      // Initialize the marker at the current position
+      markerRef.current = L.marker([latitude, longitude], { icon: taxiIcon }).addTo(map);
 
+      // Initialize routing control
+      routingControlRef.current = L.Routing.control({
+        waypoints: [
+          L.latLng(latitude, longitude),
+          dest ? L.latLng(dest.latitude, dest.longitude) : L.latLng(latitude, longitude),
+        ],
+        routeWhileDragging: true,
+      }).addTo(map);
+
+      // Watch position and update marker
       const watchId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           const newLatLng = [latitude, longitude];
 
+          // Update the marker position
           markerRef.current.setLatLng(newLatLng);
-          newMap.setView(newLatLng, 11);
+          map.setView(newLatLng, 11);
 
-          // Update route
+          // Update route waypoints without creating a new routing control
           if (destination) {
-            L.Routing.control({
-              waypoints: [
-                L.latLng(newLatLng),
-                L.latLng(destination.lat, destination.lng),
-              ],
-              routeWhileDragging: true,
-            }).addTo(newMap);
+            routingControlRef.current.setWaypoints([
+              L.latLng(latitude, longitude),
+              L.latLng(destination.lat, destination.lng),
+            ]);
           }
         },
         (error) => {
@@ -65,17 +83,22 @@ const WayToCustomer = ({ destination }) => {
         }
       );
 
+      // Clean up on unmount
       return () => {
         navigator.geolocation.clearWatch(watchId);
-        newMap.off();
-        newMap.remove();
+        map.off();
+        map.remove();
       };
     };
 
+    // Get the current position
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        initializeMap(latitude, longitude);
+        if (!mapInitialized) {
+          initializeMap(latitude, longitude);
+          setMapInitialized(true);
+        }
       },
       (error) => {
         console.error('Error getting current position:', error);
@@ -86,7 +109,7 @@ const WayToCustomer = ({ destination }) => {
         timeout: 5000,
       }
     );
-  }, [destination]);
+  }, [mapInitialized, destination]);
 
   return <div id="map" style={{ width: '100%', height: '100vh' }} ref={mapRef}></div>;
 };

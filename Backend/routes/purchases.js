@@ -28,6 +28,21 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/dest1/:id', async (req, res) => {
+  try {
+    const purchase = await Purchase.findOne({ buyerId: req.params.id });
+    if (purchase) {
+      const destination = { latitude: purchase.latitude, longitude: purchase.longitude }; // Ensure you have these fields
+      res.status(200).json(destination);
+    } else {
+      res.status(404).send({ msg: 'Destination not found' });
+    }
+  } catch (err) {
+    res.status(500).send({ msg: 'Database error', err });
+  }
+});
+
+
 router.get('/:id', async (req, res) => {
   try {
     const medicine = await Purchase.findById(req.params.id);

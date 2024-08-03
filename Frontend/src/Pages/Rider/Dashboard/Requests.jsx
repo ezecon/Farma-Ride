@@ -3,6 +3,8 @@ import { useToken } from '../../../Components/Hook/useToken';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { Button, Card, CardBody, Collapse, Dialog, DialogBody, DialogHeader, Typography } from '@material-tailwind/react';
+import WayToCustomer from '../WaytoCustomer';
 
 export default function Requests() {
   const [purchases, setPurchases] = useState([]);
@@ -12,6 +14,14 @@ export default function Requests() {
   const navigate = useNavigate();
   const [userID, setUserID] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [distinctOwners, setDistinctOwners] = useState([]);
+  const [size, setSize] = useState(null);
+ 
+  const handleOpen = (value) => setSize(value);
+ 
+ 
+  const toggleOpen = () => setOpen((cur) => !cur);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -79,6 +89,8 @@ export default function Requests() {
           const medicine = medicinesResponse.data.find(med => med._id === productId);
           return medicine ? medicine.owner : null;
         })));
+
+        setDistinctOwners(Array.from(ownerIds));
 
         const ownerPromises = Array.from(ownerIds).map(async (id) => {
           if (id) {
@@ -153,7 +165,7 @@ export default function Requests() {
       <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">REQUESTS</h1>
       <div>
         {purchases
-        .filter(purchase=>purchase.status==="Accepted!" && purchase.district===userInfo.district && purchase.division===userInfo.division && purchase.upazilas===userInfo.upazilas)
+        .filter(purchase=>purchase.status!=="Pending" && purchase.district===userInfo.district && purchase.division===userInfo.division && purchase.upazilas===userInfo.upazilas)
         .map((purchase) => (
           <div key={purchase._id} >
 
@@ -171,6 +183,39 @@ export default function Requests() {
                 <p className="font-semibold mb-2">Total: ${groupItemsByOwner(purchase.products, purchase.quantity)[ownerId].total.toFixed(2)}</p>
                 <p>Status: {purchase.status}</p>
                 {purchase.status === 'Accepted!' && <button onClick={()=>handleStatus(purchase._id,userID)} className='bg-black text-white font-bold p-2 rounded'>Accept</button>}
+                {purchase.rider===userID && <Button onClick={toggleOpen} >View Details</Button>}
+                <>
+                <Collapse open={open}>
+                  <Card className="my-4 mx-auto w-8/12">
+                    <CardBody>
+                      <Typography className='flex flex-col justify-center'>
+                        <h1 className='montserrat-alternates-bold text-xl text-[goldenrod] text-center'>Locations:</h1>
+                        {distinctOwners.map((ownerId) => (
+                          <Button onClick={() => handleOpen("xxl",ownerId)} key={ownerId} className="mb-2">
+                            SEE OWNER {owners[ownerId] || 'Unknown'}
+                          </Button>
+                        ))}
+                        <Button onClick={() => handleOpen("xxl",purchase.buyerId)} >SEE CUSTOMER</Button>
+                      </Typography>
+                    </CardBody>
+                  </Card>
+                </Collapse>
+                </>
+                <>
+                <Dialog
+                  open={
+                    size === "xxl"
+                  }
+                  size={size}
+                  handler={handleOpen}
+                >
+                  <DialogHeader>Location: {owners[ownerId]}</DialogHeader>
+                  <DialogBody>
+                  <WayToCustomer destination={{ lat: 22.865510, lng: 91.0884894 }} />
+
+                  </DialogBody>
+                </Dialog>
+                </>
               </div>
             ))}
             

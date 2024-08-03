@@ -19,6 +19,7 @@ import Main_Rider from "../Rider/Main";
 import Profile_Customer from "../../Pages/Customer/Profile/Profile";
 import { Dashboard_Customer } from "../../Pages/Customer/Dashboard/Dashboard";
 import { Dashboard_Owner } from "../../Pages/FarmacyOwner/Dashboard/Dashboard";
+import { Dashboard_Rider } from "../../Pages/Rider/Dashboard/Dashboard";
 
 const router = createBrowserRouter([
     {
@@ -80,7 +81,11 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element:<Index_Rider/>
-            }
+            },
+            {
+                path: "dashboard",
+                element:<Dashboard_Rider/>
+            },
         ]
     },
     {

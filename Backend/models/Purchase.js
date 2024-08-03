@@ -27,6 +27,22 @@ const purchaseSchema = new mongoose.Schema({
         type: String,
         default: "Pending",
     },
+    district:{
+        type: String,
+        default: ''
+    },
+    rider:{
+        type: String,
+        default: ''
+    },
+    division:{
+        type: String,
+        default: ''
+    },
+    upazilas:{
+        type: String,
+        default: ''
+    },
     price:{
         type: [Number],
         required: true

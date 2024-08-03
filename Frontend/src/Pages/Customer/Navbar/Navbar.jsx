@@ -178,6 +178,9 @@ export default function Navbar() {
         price: cartItems.map(item => item.price),
         latitude,
         longitude,
+        division: userInfo.division,
+        district: userInfo.district,
+        upazilas:userInfo.upazilas,
         buyType: selectedMethod,
       });
       if (response.status === 200) {

@@ -4,10 +4,10 @@ const Purchase = require('../models/Purchase.js');
 const router = express.Router();
 
 router.post('/buy', async (req, res) => {
-    const { buyerId, sellerIds, products, quantity, price, latitude, longitude, buyType } = req.body;
+    const { buyerId, sellerIds, products, quantity, price, latitude, longitude, buyType, division, district, upazilas } = req.body;
 
     const newPurchase = new Purchase({
-        buyerId, sellerIds, products, quantity, price, latitude, longitude, buyType
+        buyerId, sellerIds, products, quantity, price, latitude, longitude, buyType, division, district, upazilas
     });
 
     try { 
@@ -55,6 +55,19 @@ router.get('/user/:userID', async (req, res) => {
 
 
 router.put('/update/:id', async (req, res) => {
+  try {
+    const cartItem = await Purchase.findById(req.params.id);
+    if (!cartItem) {
+      return res.status(404).send({ msg: 'Cart item not found' });
+    }
+    cartItem.status = "Accepted!";
+    await cartItem.save();
+    res.status(200).send({ msg: 'Quantity updated successfully', cartItem });
+  } catch (err) {
+    res.status(500).send({ msg: 'Database error', err });
+  }
+});
+router.put('/rider/update/:id', async (req, res) => {
   try {
     const cartItem = await Purchase.findById(req.params.id);
     if (!cartItem) {

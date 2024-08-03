@@ -7,7 +7,7 @@ router.post('/buy', async (req, res) => {
     const { buyerId, sellerIds, products, quantity, price, latitude, longitude, buyType, division, district, upazilas } = req.body;
 
     const newPurchase = new Purchase({
-        buyerId, sellerIds, products, quantity, price, latitude, longitude, buyType, division, district, upazilas
+        buyerId, sellerIds, products, quantity, price, latitude, longitude, buyType, 
     });
 
     try { 

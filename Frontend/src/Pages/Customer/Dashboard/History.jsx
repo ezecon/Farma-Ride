@@ -108,7 +108,7 @@ export default function History() {
       <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">HISTORY</h1>
       <div>
         {purchases
-        .filter(purchase=>purchase.status==="Deliverd")
+        .filter(purchase=>purchase.status==="Delivered")
         .map((purchase) => (
           <div key={purchase._id} className="mb-5 p-4 border border-gray-200 rounded-lg shadow-lg montserrat-alternates-light">
             <h2 className=" font-bold mb-2">Purchase ID: {purchase._id}</h2>

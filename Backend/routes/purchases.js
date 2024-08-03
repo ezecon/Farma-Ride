@@ -82,19 +82,20 @@ router.put('/update/:id', async (req, res) => {
     res.status(500).send({ msg: 'Database error', err });
   }
 });
-router.put('customer/update/:id', async (req, res) => {
+router.put('/customer/update/:id', async (req, res) => {
   try {
     const cartItem = await Purchase.findById(req.params.id);
     if (!cartItem) {
       return res.status(404).send({ msg: 'Cart item not found' });
     }
-    cartItem.status = "Deliver";
+    cartItem.status = "Delivered";
     await cartItem.save();
-    res.status(200).send({ msg: ' updated successfully', cartItem });
+    res.status(200).send({ msg: 'Updated successfully', cartItem });
   } catch (err) {
     res.status(500).send({ msg: 'Database error', err });
   }
 });
+
 router.put('/rider/update/:id', async (req, res) => {
   try {
     const {userID} = req.body;

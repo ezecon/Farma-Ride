@@ -112,9 +112,9 @@ export default function Requests() {
 
   const handleRec = async (id) => {
     try {
-      const response = await axios.put(`https://farma-ride-server.vercel.app/api/purchases/customer/update/${id}`, { status: "Accepted" });
+      const response = await axios.put(`https://farma-ride-server.vercel.app/api/purchases/customer/update/${id}`);
       if (response.status === 200) {
-        toast.success("Accepted");
+        toast.success("Status updated to Delivered");
       } else {
         toast.error("Failed to update status");
       }
@@ -123,6 +123,7 @@ export default function Requests() {
       toast.error("An error occurred while updating status");
     }
   }
+  
 
   return (
     <div className="container mx-auto p-4">
@@ -147,7 +148,7 @@ export default function Requests() {
             ))}
             <p>Status: {purchase.status}</p>
             {purchase.rider && <p>Rider ID: {purchase.rider} || <button  className='bg-black text-white font-bold p-2 rounded'>Check Info</button></p>}
-            {purchase.status === 'On the way' && <button  onClick={handleRec} className='bg-black text-white font-bold p-2 rounded'>Received</button>}
+            {purchase.status === 'On the way' && <button  onClick={() => handleRec(purchase._id)} className='bg-black text-white font-bold p-2 rounded'>Received</button>}
 
           </div>
         ))}

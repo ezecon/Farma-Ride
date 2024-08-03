@@ -110,6 +110,20 @@ export default function Requests() {
     }, {});
   };
 
+  const handleRec = async (id) => {
+    try {
+      const response = await axios.put(`https://farma-ride-server.vercel.app/api/purchases/customer/update/${id}`, { status: "Accepted" });
+      if (response.status === 200) {
+        toast.success("Accepted");
+      } else {
+        toast.error("Failed to update status");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while updating status");
+    }
+  }
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">REQUESTS</h1>
@@ -132,6 +146,9 @@ export default function Requests() {
               </div>
             ))}
             <p>Status: {purchase.status}</p>
+            {purchase.rider && <p>Rider ID: {purchase.rider} || <button  className='bg-black text-white font-bold p-2 rounded'>Check Info</button></p>}
+            {purchase.status === 'On the way' && <button  onClick={handleRec} className='bg-black text-white font-bold p-2 rounded'>Received</button>}
+
           </div>
         ))}
       </div>

@@ -3,13 +3,23 @@ import { useToken } from '../../../Components/Hook/useToken';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { Button, Card, CardBody, Collapse, Dialog, DialogBody, DialogHeader, Typography } from '@material-tailwind/react';
+import {
+  Button,
+  Card,
+  CardBody,
+  Collapse,
+  Dialog,
+  DialogBody,
+  DialogHeader,
+  Typography,
+} from '@material-tailwind/react';
 import WayToCustomer from '../WaytoCustomer';
+import WayToOwner from './WaytoOwner';
 
 export default function Requests() {
   const [purchases, setPurchases] = useState([]);
   const [medicines, setMedicines] = useState([]);
-  const [owners, setOwners] = useState({}); // State to store owner names
+  const [owners, setOwners] = useState({});
   const { token, removeToken } = useToken();
   const navigate = useNavigate();
   const [userID, setUserID] = useState(null);
@@ -17,10 +27,13 @@ export default function Requests() {
   const [open, setOpen] = useState(false);
   const [distinctOwners, setDistinctOwners] = useState([]);
   const [size, setSize] = useState(null);
- 
+  const [dialogOwner, setDialogOwner] = useState(null);
+  const [dialogCustomer, setDialogCustomer] = useState(null);
+
   const handleOpen = (value) => setSize(value);
- 
- 
+  const handleOpenOwnerDialog = (ownerId) => setDialogOwner(ownerId);
+  const handleOpenCustomerDialog = (buyerId) => setDialogCustomer(buyerId);
+
   const toggleOpen = () => setOpen((cur) => !cur);
 
   useEffect(() => {
@@ -84,11 +97,12 @@ export default function Requests() {
           toast.error('Error fetching medicines');
         }
 
-        // Fetch owner names
-        const ownerIds = new Set(purchasesResponse.data.flatMap(purchase => purchase.products.map(productId => {
-          const medicine = medicinesResponse.data.find(med => med._id === productId);
-          return medicine ? medicine.owner : null;
-        })));
+        const ownerIds = new Set(purchasesResponse.data.flatMap(purchase =>
+          purchase.products.map(productId => {
+            const medicine = medicinesResponse.data.find(med => med._id === productId);
+            return medicine ? medicine.owner : null;
+          })
+        ));
 
         setDistinctOwners(Array.from(ownerIds));
 
@@ -121,7 +135,6 @@ export default function Requests() {
     fetchData();
   }, [userID]);
 
-  // Group items by their owners within each purchase, including counts and total price
   const groupItemsByOwner = (products, quantities) => {
     return products.reduce((acc, productId, index) => {
       const medicine = medicines.find(med => med._id === productId);
@@ -145,7 +158,8 @@ export default function Requests() {
       return acc;
     }, {});
   };
-  const handleStatus = async (id,userID) => {
+
+  const handleStatus = async (id, userID) => {
     try {
       const response = await axios.put(`https://farma-ride-server.vercel.app/api/purchases/rider/update/${id}`, { status: "Accepted", userID });
       if (response.status === 200) {
@@ -158,70 +172,76 @@ export default function Requests() {
       toast.error("An error occurred while updating status");
     }
   }
-  
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="py-5 text-2xl text-center text-[goldenrod] font-bold">REQUESTS</h1>
       <div>
         {purchases
-        .filter(purchase=>purchase.status!=="Pending" && purchase.district===userInfo.district && purchase.division===userInfo.division && purchase.upazilas===userInfo.upazilas)
-        .map((purchase) => (
-          <div key={purchase._id} >
-
-            {/* Group items by owner */}
-            {Object.keys(groupItemsByOwner(purchase.products, purchase.quantity)).map((ownerId) => (
-              <div key={ownerId} className="mb-5 p-4 border border-gray-200 rounded-lg shadow-lg montserrat-alternates-light">
-              <h2 className="font-bold mb-2">Purchase ID: {purchase._id}</h2>
-              <p className="text-black mb-2">Date: {new Date(purchase.date).toLocaleDateString()}</p>
-                <h3 className="text-lg font-semibold">Owner: {owners[ownerId] || 'Unknown'}</h3>
-                <ul className="list-disc pl-5">
-                  {Object.entries(groupItemsByOwner(purchase.products, purchase.quantity)[ownerId].items).map(([medicineName, { count, totalPrice }]) => (
-                    <li key={medicineName} className="text-black">{medicineName} (x{count}) - Total: ${totalPrice.toFixed(2)}</li>
-                  ))}
-                </ul>
-                <p className="font-semibold mb-2">Total: ${groupItemsByOwner(purchase.products, purchase.quantity)[ownerId].total.toFixed(2)}</p>
-                <p>Status: {purchase.status}</p>
-                {purchase.status === 'Accepted!' && <button onClick={()=>handleStatus(purchase._id,userID)} className='bg-black text-white font-bold p-2 rounded'>Accept</button>}
-                {purchase.rider===userID && <Button onClick={toggleOpen} >View Details</Button>}
-                <>
-                <Collapse open={open}>
-                  <Card className="my-4 mx-auto w-8/12">
-                    <CardBody>
-                      <Typography className='flex flex-col justify-center'>
-                        <h1 className='montserrat-alternates-bold text-xl text-[goldenrod] text-center'>Locations:</h1>
-                        {distinctOwners.map((ownerId) => (
-                          <Button onClick={() => handleOpen("xxl",ownerId)} key={ownerId} className="mb-2">
-                            SEE OWNER {owners[ownerId] || 'Unknown'}
-                          </Button>
-                        ))}
-                        <Button onClick={() => handleOpen("xxl",purchase.buyerId)} >SEE CUSTOMER</Button>
-                      </Typography>
-                    </CardBody>
-                  </Card>
-                </Collapse>
-                </>
-                <>
-                <Dialog
-                  open={
-                    size === "xxl"
-                  }
-                  size={size}
-                  handler={handleOpen}
-                >
-                  <DialogHeader>Location: {owners[ownerId]}</DialogHeader>
-                  <DialogBody>
-                  <WayToCustomer destination={purchase.buyerId} />
-
-                  </DialogBody>
-                </Dialog>
-                </>
-              </div>
-            ))}
-            
-          </div>
-        ))}
+          .filter(purchase =>
+            purchase.status !== "Pending" &&
+            purchase.district === userInfo?.district &&
+            purchase.division === userInfo?.division &&
+            purchase.upazilas === userInfo?.upazilas
+          )
+          .map((purchase) => (
+            <div key={purchase._id} >
+              {Object.keys(groupItemsByOwner(purchase.products, purchase.quantity)).map((ownerId) => (
+                <div key={ownerId} className="mb-5 p-4 border border-gray-200 rounded-lg shadow-lg montserrat-alternates-light">
+                  <h2 className="font-bold mb-2">Purchase ID: {purchase._id}</h2>
+                  <p className="text-black mb-2">Date: {new Date(purchase.date).toLocaleDateString()}</p>
+                  <h3 className="text-lg font-semibold">Owner: {owners[ownerId] || 'Unknown'}</h3>
+                  <ul className="list-disc pl-5">
+                    {Object.entries(groupItemsByOwner(purchase.products, purchase.quantity)[ownerId].items).map(([medicineName, { count, totalPrice }]) => (
+                      <li key={medicineName} className="text-black">{medicineName} (x{count}) - Total: ${totalPrice.toFixed(2)}</li>
+                    ))}
+                  </ul>
+                  <p className="font-semibold mb-2">Total: ${groupItemsByOwner(purchase.products, purchase.quantity)[ownerId].total.toFixed(2)}</p>
+                  <p>Status: {purchase.status}</p>
+                  {purchase.status === 'Accepted!' && <button onClick={() => handleStatus(purchase._id, userID)} className='bg-black text-white font-bold p-2 rounded'>Accept</button>}
+                  {purchase.rider === userID && <Button onClick={toggleOpen} >View Details</Button>}
+                  <Collapse open={open}>
+                    <Card className="my-4 mx-auto w-8/12">
+                      <CardBody>
+                        <Typography className='flex flex-col justify-center'>
+                          <h1 className='montserrat-alternates-bold text-xl text-[goldenrod] text-center'>Locations:</h1>
+                          {distinctOwners.map((ownerId) => (
+                            <Button onClick={() => handleOpenOwnerDialog(ownerId)} key={ownerId} className="mb-2">
+                              SEE OWNER {owners[ownerId] || 'Unknown'}
+                            </Button>
+                          ))}
+                          <Button onClick={() => handleOpenCustomerDialog(purchase.buyerId)} >SEE CUSTOMER</Button>
+                        </Typography>
+                      </CardBody>
+                    </Card>
+                  </Collapse>
+                </div>
+              ))}
+            </div>
+          ))}
       </div>
+
+      <Dialog
+        open={dialogOwner !== null}
+        size="xxl"
+        handler={() => setDialogOwner(null)}
+      >
+        <DialogHeader>Location: {owners[dialogOwner]}</DialogHeader>
+        <DialogBody>
+          <WayToOwner destination={dialogOwner} />
+        </DialogBody>
+      </Dialog>
+
+      <Dialog
+        open={dialogCustomer !== null}
+        size="xxl"
+        handler={() => setDialogCustomer(null)}
+      >
+        <DialogHeader>Location: Customer</DialogHeader>
+        <DialogBody>
+          <WayToCustomer destination={dialogCustomer} />
+        </DialogBody>
+      </Dialog>
     </div>
   );
 }

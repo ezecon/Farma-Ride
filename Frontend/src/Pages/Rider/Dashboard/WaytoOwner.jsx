@@ -6,7 +6,7 @@ import 'leaflet-routing-machine';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
-const WayToCustomer = ({ destination }) => {
+const WayToOwner = ({ destination }) => {
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const routingControlRef = useRef(null);
@@ -16,9 +16,10 @@ const WayToCustomer = ({ destination }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://farma-ride-server.vercel.app/api/purchases/dest1/${destination}`);
+        const response = await axios.get(`https://farma-ride-server.vercel.app/api/users/${destination}`);
         if (response.status === 200) {
           setDest(response.data);
+          console.log(dest)
         } else {
           toast.error('Error fetching destination');
         }
@@ -106,4 +107,4 @@ const WayToCustomer = ({ destination }) => {
   return <div id="map" style={{ width: '100%', height: '100vh' }} ref={mapRef}></div>;
 };
 
-export default WayToCustomer;
+export default WayToOwner;

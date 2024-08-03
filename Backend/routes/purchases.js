@@ -69,11 +69,13 @@ router.put('/update/:id', async (req, res) => {
 });
 router.put('/rider/update/:id', async (req, res) => {
   try {
+    const {userID} = req.body;
     const cartItem = await Purchase.findById(req.params.id);
     if (!cartItem) {
       return res.status(404).send({ msg: 'Cart item not found' });
     }
-    cartItem.status = "Accepted!";
+    cartItem.status = "On the way";
+    cartItem.rider = userID;
     await cartItem.save();
     res.status(200).send({ msg: 'Quantity updated successfully', cartItem });
   } catch (err) {

@@ -133,9 +133,9 @@ export default function Requests() {
       return acc;
     }, {});
   };
-  const handleStatus = async (id) => {
+  const handleStatus = async (id,userID) => {
     try {
-      const response = await axios.put(`https://farma-ride-server.vercel.app/api/purchases/update/${id}`, { status: "Accepted" });
+      const response = await axios.put(`https://farma-ride-server.vercel.app/api/purchases/rider/update/${id}`, { status: "Accepted", userID });
       if (response.status === 200) {
         toast.success("Accepted");
       } else {
@@ -170,7 +170,7 @@ export default function Requests() {
                 </ul>
                 <p className="font-semibold mb-2">Total: ${groupItemsByOwner(purchase.products, purchase.quantity)[ownerId].total.toFixed(2)}</p>
                 <p>Status: {purchase.status}</p>
-                {purchase.status === 'Pending' && <button onClick={()=>handleStatus(purchase._id)} className='bg-black text-white font-bold p-2 rounded'>Accept</button>}
+                {purchase.status === 'Accepted!' && <button onClick={()=>handleStatus(purchase._id,userID)} className='bg-black text-white font-bold p-2 rounded'>Accept</button>}
               </div>
             ))}
             

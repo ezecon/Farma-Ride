@@ -39,9 +39,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    city:{
+    delivery:{
         type: String,
-        default: ''
+        default: 0
     },
     latitude:{
         type: String,

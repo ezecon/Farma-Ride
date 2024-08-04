@@ -20,6 +20,11 @@ import Profile_Customer from "../../Pages/Customer/Profile/Profile";
 import { Dashboard_Customer } from "../../Pages/Customer/Dashboard/Dashboard";
 import { Dashboard_Owner } from "../../Pages/FarmacyOwner/Dashboard/Dashboard";
 import { Dashboard_Rider } from "../../Pages/Rider/Dashboard/Dashboard";
+import Update_Customer from "../../Pages/Customer/Profile/Update";
+import Profile_Owner from "../../Pages/FarmacyOwner/Profile/Profile";
+import Update_Owner from "../../Pages/FarmacyOwner/Profile/Update";
+import Profile_Rider from "../../Pages/Rider/Profile/Profile";
+import Update_Rider from "../../Pages/Rider/Profile/Update";
 
 const router = createBrowserRouter([
     {
@@ -37,6 +42,10 @@ const router = createBrowserRouter([
             {
                 path: "profile",
                 element: <Profile_Customer />
+            },
+            {
+                path: "profile-update",
+                element: <Update_Customer />
             },
             {
                 path: "dashboard",
@@ -65,6 +74,14 @@ const router = createBrowserRouter([
                 element: <Index_Owner/>
             },
             {
+                path: "profile",
+                element: <Profile_Owner />
+            },
+            {
+                path: "profile-update",
+                element: <Update_Owner />
+            },
+            {
                 path:"dashboard",
                 element: <Dashboard_Owner/>
             },
@@ -81,6 +98,14 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element:<Index_Rider/>
+            },
+            {
+                path: "profile",
+                element: <Profile_Rider />
+            },
+            {
+                path: "profile-update",
+                element: <Update_Rider />
             },
             {
                 path: "dashboard",

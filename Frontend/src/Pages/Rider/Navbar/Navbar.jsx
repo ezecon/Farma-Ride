@@ -90,20 +90,14 @@ export default function Navbar() {
     <div className='bg-[#ffffff] rounded-lg border border-[#d8d8d8] shadow-xl mb-2'>
       <div className="flex  justify-between  px-10 py-2">
           <div className="flex-1 water-text py-2">
-              <a href="/farmacy-owner">
+              <a href="/rider">
                   <h1 className="font-bold sm:text-lg md:text-xl text-white">FARMA-RIDE</h1>
                   <h1 className="font-bold sm:text-lg md:text-xl text-white">FARMA-RIDE</h1>
               </a>
             </div>
           <div className="">
             <ul className="flex space-x-6 pt-2">
-              <Tooltip content="Notifications">
-              <li className='mr-4 mt-3'>
-                <a className="text-Black" href="/notifactions">
-                <Badge content="5"> <IoMdNotifications  className=' text-2xl'/></Badge>
-                </a>
-              </li>
-              </Tooltip>
+
               <li>
                 <div className="flex items-center gap-x-1 ">
                       <Menu>

@@ -37,7 +37,7 @@ export default function HeroSection() {
                 placeholder="Search Medicine"
                 className={INPUT_CLASSES}
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => setSearch(e.target.value.toLowerCase())}
               />
               <IoSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white" />
             </div>

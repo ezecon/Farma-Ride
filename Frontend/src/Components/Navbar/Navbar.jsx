@@ -19,25 +19,21 @@ export default function Navbar() {
         <div className="hidden md:flex lg:pr-56 lg:pt-2">
           <ul className="flex space-x-6 pt-2">
             <li>
-              <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="#home">
+              <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="#">
                 Home
               </a>
             </li>
             <li>
-              <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="#gallery">
-                Gallery
+              <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="/health-tips">
+              Health Tips
               </a>
             </li>
             <li>
-              <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="/players">
-                Players
+              <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="/doctor-advise">
+                Doctor Advise
               </a>
             </li>
-            <li>
-              <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="/events">
-                Events
-              </a>
-            </li>
+
             <li>
               <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="login/role">
                 Login
@@ -58,17 +54,14 @@ export default function Navbar() {
       </div>
       {isMenuOpen && (
         <div className="md:hidden flex flex-col space-y-2 px-4 py-2">
-          <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="#home" onClick={toggleMenu}>
+          <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="#" onClick={toggleMenu}>
             Home
           </a>
-          <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="#gallery" onClick={toggleMenu}>
-            Gallery
+          <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="health-tips" onClick={toggleMenu}>
+          Health Tips
           </a>
-          <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="/players" onClick={toggleMenu}>
-            Players
-          </a>
-          <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="/events" onClick={toggleMenu}>
-            Events
+          <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="/doctor-advise" onClick={toggleMenu}>
+            Doctor Advise
           </a>
           <a className="text-[#ffffff] hover:underline hover:underline-offset-4 font-mono" href="login/role" onClick={toggleMenu}>
             Login

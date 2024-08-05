@@ -25,11 +25,16 @@ import Profile_Owner from "../../Pages/FarmacyOwner/Profile/Profile";
 import Update_Owner from "../../Pages/FarmacyOwner/Profile/Update";
 import Profile_Rider from "../../Pages/Rider/Profile/Profile";
 import Update_Rider from "../../Pages/Rider/Profile/Update";
+import MainH from "../Daily-Tips/Main";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Main />
+    },
+    {
+        path: "/health-tips",
+        element: <MainH />
     },
     {
         path: "/customer",

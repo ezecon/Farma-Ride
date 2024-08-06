@@ -180,18 +180,17 @@ export default function Navbar() {
         longitude,
         division: userInfo.division,
         district: userInfo.district,
-        upazilas:userInfo.upazilas,
+        upazilas: userInfo.upazilas,
         buyType: selectedMethod,
       });
       if (response.status === 200) {
         toast.success("Order Done!");
-        
+
         deleteItem(userID);
         const timeout = setTimeout(() => {
           setOpenX(false);
+        }, 5000);
 
-        }, 5000); 
-    
         return () => clearTimeout(timeout);
       }
     } catch (err) {
@@ -200,7 +199,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className='bg-[#ffffff] rounded-lg border border-[#d8d8d8] shadow-xl mb-2'>
+    <div className="bg-[#ffffff] rounded-lg border border-[#d8d8d8] shadow-xl mb-2">
       <div className="flex justify-between px-10 py-2">
         <div className="flex-1 water-text py-2 water-text">
           <a href="/customer">
@@ -269,111 +268,103 @@ export default function Navbar() {
                 </svg>
               </IconButton>
             </div>
-            {cartItems.length === 0 ? (
-              <Typography color="gray" className="mb-8 pr-4 font-normal">
-                Your cart is empty.
-              </Typography>
-            ) : (
+            {cartItems.length ? (
               <div>
                 {cartItems.map((item) => (
-                  <div key={item._id} className="mb-4 flex items-center justify-between">
-                    <div>
-                      <Typography variant="h6">{item.medicineName}</Typography>
-                      <Typography color="gray">
-                        {item.quantity} x ৳{item.singlePrice.toFixed(2)}
-                      </Typography>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button size="sm" variant="outlined" onClick={() => updateQuantity(item._id, item.quantity - 1, (item.price - item.singlePrice))}>
-                        -
-                      </Button>
-                      <Typography>{item.quantity}</Typography>
-                      <Button size="sm" variant="outlined" onClick={() => updateQuantity(item._id, item.quantity + 1, (item.price + item.singlePrice))}>
-                        +
-                      </Button>
-                      <IconButton variant="text" color="red" onClick={() => removeItem(item._id)}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
-                          className="h-5 w-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </IconButton>
+                  <div key={item._id} className="mb-4 border-b pb-2">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <Typography variant="h6" className="text-black">{item.productName}</Typography>
+                        <div className="flex items-center gap-x-1">
+                          <button
+                            onClick={() => updateQuantity(item._id, item.quantity - 1, item.price - item.singlePrice)}
+                            className="bg-[#FFB800] text-white px-2 rounded"
+                          >
+                            -
+                          </button>
+                          <span className="mx-2">{item.quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(item._id, item.quantity + 1, item.price + item.singlePrice)}
+                            className="bg-[#FFB800] text-white px-2 rounded"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <Typography variant="small" className="text-gray-600">
+                          BDT {item.price}
+                        </Typography>
+                      </div>
+                      <button
+                        onClick={() => removeItem(item._id)}
+                        className="text-red-500 text-lg"
+                      >
+                        &times;
+                      </button>
                     </div>
                   </div>
                 ))}
-                <div className="mt-4 flex items-center justify-between">
-                  <Typography variant="h6">Total:</Typography>
-                  <Typography variant="h6">৳{calculateTotal()}</Typography>
+                <div className="border-t pt-4">
+                  <Typography variant="h6" className="text-black">
+                    Total: BDT {calculateTotal()}
+                  </Typography>
+                  <button
+                    onClick={handleOpenX}
+                    className="w-full bg-[#FFB800] text-white py-2 mt-4 rounded"
+                  >
+                    Place Order
+                  </button>
                 </div>
-                <Button size="sm" className="mt-4 bg-[goldenrod]" fullWidth onClick={handleOpenX}>
-                  Checkout
-                </Button>
               </div>
+            ) : (
+              <Typography variant="body2" className="text-gray-500">
+                Your cart is empty.
+              </Typography>
             )}
           </Drawer>
+          <Dialog open={openX} handler={handleOpenX} size="lg">
+            <DialogHeader className="text-[goldenrod]">Confirmation</DialogHeader>
+            <DialogBody divider>
+              <div className="flex flex-col sm:flex-row">
+                <div className="w-full sm:w-1/2">
+                  <Typography>Latitude: {latitudeShared ?? latitudeX}</Typography>
+                  <Typography>Longitude: {longitudeShared ?? longitudeX}</Typography>
+                  <Typography className="mt-2 font-semibold">Payment Method:</Typography>
+                  <div className="flex flex-col gap-2">
+                    <label className="flex items-center gap-2">
+                      <Radio
+                        name="method"
+                        value="cod"
+                        color="orange"
+                        onChange={() => handlePaymentMethodChange('cod')}
+                        checked={selectedMethod === 'cod'}
+                      />
+                      Cash on Delivery
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <Radio
+                        name="method"
+                        value="online"
+                        color="orange"
+                        onChange={() => handlePaymentMethodChange('online')}
+                        checked={selectedMethod === 'online'}
+                      />
+                      Online Payment
+                    </label>
+                  </div>
+                  <Button color="green" onClick={handleLiveLocation} className="mt-4">
+                    Share Live Location
+                  </Button>
+                  <Button color="green" onClick={handleOrder} className="mt-4">
+                    Confirm Order
+                  </Button>
+                </div>
+                <div className="w-full sm:w-1/2">
+                  <Map latitude={latitudeShared ?? latitudeX} longitude={longitudeShared ?? longitudeX} />
+                </div>
+              </div>
+            </DialogBody>
+          </Dialog>
         </Fragment>
-      </div>
-      <div>
-        <Dialog open={openX} handler={handleOpenX}>
-          <DialogHeader className='text-[goldenrod] text-center text-2xl montserrat-alternates-light'>Order Confirmation</DialogHeader>
-          <DialogBody>
-            <div>
-                  <div className="border rounded-lg p-4 bg-white shadow-md">
-                    <h1 className="text-xl font-bold mb-2">Address:</h1>
-                    <p className="text-gray-600 mb-4">Want to use your default address?</p>
-                    <div className="mb-5">
-                      {userInfo && userInfo.latitude && userInfo.longitude && (
-                        <Map className="w-full h-64 rounded-lg" latitude={userInfo.latitude} longitude={userInfo.longitude} />
-                      )}
-                      <p className='montserrat-alternates-light  text-sm'>if you want to use default, don't need to select anything</p>
-                    </div>
-                    <p className="text-gray-600 mb-4">or,</p>
-                    <Button onClick={handleLiveLocation} className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                      Live
-                    </Button>
-                  </div>
-                  <div className="border rounded-lg p-4 bg-white shadow-md">
-                   <h1 className="text-xl font-bold mb-2">Payment Method:</h1>
-                   <div className="space-y-4 mb-6">
-                            <Card className="cursor-pointer" onClick={() => handlePaymentMethodChange('bkash')}>
-                              <CardBody className={`p-4 ${selectedMethod === 'bkash' ? 'border-2 border-blue-500' : ''}`}>
-                                <Radio 
-                                  name="paymentMethod"
-                                  label="with Bkash"
-                                  checked={selectedMethod === 'bkash'}
-                                  onChange={() => handlePaymentMethodChange('bkash')}
-                                />
-                              </CardBody>
-                            </Card>
-                            <Card className="cursor-pointer" onClick={() => handlePaymentMethodChange('cashOnDel')}>
-                              <CardBody className={`p-4 ${selectedMethod === 'cashOnDel' ? 'border-2 border-blue-500' : ''}`}>
-                                <Radio 
-                                  name="paymentMethod"
-                                  label="Cash On Delivery"
-                                  checked={selectedMethod === 'cashOnDel'}
-                                  onChange={() => handlePaymentMethodChange('cashOnDel')}
-                                />
-                              </CardBody>
-                            </Card>
-                          </div>
-                          {selectedMethod && <div className='flex justify-center'>
-                                 <div onClick={handleOrder}><OrderButton /></div>
-                          </div>
-}
-                  </div>
-
-            </div>
-          </DialogBody>
-        </Dialog>
       </div>
     </div>
   );

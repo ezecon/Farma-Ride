@@ -7,7 +7,7 @@ export default function Card({ data }) {
   const navigate = useNavigate();
 
   const handleNavigate = (_id) => {
-    navigate(`/customer/owner-view/${_id}`);
+    navigate(`/customer/check-farmacy/${_id}`);
   };
 
   return (

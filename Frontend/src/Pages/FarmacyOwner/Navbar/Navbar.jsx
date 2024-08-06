@@ -140,13 +140,6 @@ export default function Navbar() {
 
               </li>
               </Tooltip>
-              <Tooltip content="Notifications">
-              <li className='mr-4 mt-3'>
-                <a className="text-Black" href="/notifactions">
-                <Badge content="5"> <IoMdNotifications  className=' text-2xl'/></Badge>
-                </a>
-              </li>
-              </Tooltip>
               <li>
                 <div className="flex items-center gap-x-1 ">
                       <Menu>

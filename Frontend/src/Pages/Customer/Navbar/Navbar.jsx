@@ -341,7 +341,7 @@ export default function Navbar() {
             </div>
             <Button onClick={handleLiveLocation} className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
               Live
-            </Button>
+            </Button>    
           </div>
           <div className="border rounded-lg p-3 sm:p-4 bg-white shadow-md">
             <h1 className="text-lg sm:text-xl font-bold mb-2">Payment Method:</h1>

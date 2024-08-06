@@ -324,12 +324,12 @@ export default function Navbar() {
       </div>
       <div>
       <Dialog open={openX} handler={handleOpenX} className="w-full max-w-lg mx-auto p-2 sm:p-4 md:p-6">
-        <DialogHeader className="text-[goldenrod] text-center text-xl sm:text-2xl montserrat-alternates-light">
+        <DialogHeader className="text-[goldenrod] text-center text-xl montserrat-alternates-light">
           Order Confirmation
         </DialogHeader>
         <DialogBody className="space-y-4 sm:space-y-6">
           <div className="border rounded-lg p-3 sm:p-4 bg-white shadow-md">
-            <h1 className="text-lg sm:text-xl font-bold mb-2">Address:</h1>
+            <h1 className="text-md sm:text-xl font-bold mb-2">Address:</h1>
             <p className="text-gray-600 mb-2 sm:mb-4 text-sm">Want to use your default address?</p>
             <div className="mb-4 sm:mb-5">
               {userInfo && userInfo.latitude && userInfo.longitude && (

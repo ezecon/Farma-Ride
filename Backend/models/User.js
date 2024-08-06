@@ -40,7 +40,7 @@ const UserSchema = new mongoose.Schema({
         default: ''
     },
     delivery:{
-        type: String,
+        type: Number,
         default: 0
     },
     latitude:{

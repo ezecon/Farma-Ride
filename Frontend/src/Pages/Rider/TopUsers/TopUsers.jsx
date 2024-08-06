@@ -51,7 +51,7 @@ export default function TopUsers() {
           <p className="text-[goldenrod] p-2 text-2xl text-center montserrat-alternates-bold">{item.name}</p>
         </div>
       ))}
-    </div>
+    </div>  
   </div>
   
   

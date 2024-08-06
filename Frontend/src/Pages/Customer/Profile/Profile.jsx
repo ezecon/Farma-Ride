@@ -5,7 +5,7 @@ import { Button } from '@material-tailwind/react';
 import { useToken } from '../../../Components/Hook/useToken';
 import Map from '../MapCard/SingleMap';
 
-export default function Profile_Rider() {
+export default function Profile_Customer() {
   const [user, setUser] = useState({});
   const { token, removeToken } = useToken();
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export default function Profile_Rider() {
         navigate('/login');
       }
       try {
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://farma-ride-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
@@ -39,7 +39,7 @@ export default function Profile_Rider() {
     if (userID) {
       const fetchUser = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
+          const response = await axios.get(`https://farma-ride-server.vercel.app/api/users/${userID}`);
           setUser(response.data);
         } catch (error) {
           console.error('Error fetching user profile:', error);
@@ -68,9 +68,8 @@ export default function Profile_Rider() {
           <div className="flex items-center space-x-4">
             <div>
               <img src={user.photo} alt="User" className="w-32 h-32 object-cover rounded-full border border-gray-300 shadow-md" />
-              <Link to="profile-update">
-                <Button color="black" className="w-full mt-4 transition-transform transform hover:scale-105">Edit Profile</Button>
-              </Link>
+               
+                <a href="profile-update"> <Button color="black" className="w-full mt-4 transition-transform transform hover:scale-105">Edit Profile</Button></a>
             </div>
             <div>
               <p className="text-lg font-semibold"><strong>Name:</strong> {user.name}</p>

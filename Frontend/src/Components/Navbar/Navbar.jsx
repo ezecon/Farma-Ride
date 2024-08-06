@@ -13,8 +13,10 @@ export default function Navbar() {
     <div className='bg-black'>
       <div className="navbar flex flex-wrap justify-between items-center px-4 py-2">
       <div className="flex-1 water-text text-center relative lg:left-[-20rem]">
+      <a href="/">
           <h2 className="font-bold sm:text-lg md:text-2xl text-white">FARMA-RIDE</h2>
           <h2 className="font-bold sm:text-lg md:text-2xl text-white">FARMA-RIDE</h2>
+       </a>
         </div>
         <div className="hidden md:flex lg:pr-56 lg:pt-2">
           <ul className="flex space-x-6 pt-2">

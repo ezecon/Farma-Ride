@@ -171,11 +171,19 @@ router.put('/update', upload.single('photo'), async (req, res) => {
     }
 });
 
-router.put('/profile/:id', upload.single('photo'), async (req, res) => {
-    const { name, email, number, city, zipCode, district, country, latitude, longitude } = req.body;
-    let photoUrl = null;
 
+
+router.put('/profile/:id', upload.single('photo'), async (req, res) => {
     try {
+        const { name, email, number, city, zipCode, district, country, latitude, longitude } = req.body;
+        let photoUrl = null;
+
+        // Find the user and update profile
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ success: false, msg: 'User not found' });
+        }
+
         // Upload photo to Cloudinary if present
         if (req.file) {
             const result = await new Promise((resolve, reject) => {
@@ -186,12 +194,6 @@ router.put('/profile/:id', upload.single('photo'), async (req, res) => {
             });
 
             photoUrl = result.secure_url;
-        }
-
-        // Find the user and update profile
-        const user = await User.findById(req.params.id);
-        if (!user) {
-            return res.status(404).json({ success: false, msg: 'User not found' });
         }
 
         user.name = name || user.name;
@@ -211,11 +213,12 @@ router.put('/profile/:id', upload.single('photo'), async (req, res) => {
         await user.save();
         res.send({ success: true, msg: 'Profile updated successfully', user });
     } catch (err) {
+        console.error('Error during profile update:', err);
         res.status(500).send({ success: false, msg: 'Database error', err });
     }
 });
 
-module.exports = router;
+
 // Delete user by email
 router.delete('/delete', async (req, res) => {
     const { email } = req.body;

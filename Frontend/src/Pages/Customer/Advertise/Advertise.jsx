@@ -10,7 +10,7 @@ export default function Advertise() {
           <FaStethoscope className="text-6xl md:text-8xl p-2" />
           <div>
             <h1 className="font-mono text-xl md:text-2xl font-bold">Get Daily Health Tips</h1>
-            <a href="https://play.google.com">
+            <a href="/customer/health-tips">
               <p className="font-mono flex items-center">Tap to go <FaLongArrowAltRight className="pl-2 md:pl-3 text-2xl md:text-3xl" /> </p>
             </a>
           </div>

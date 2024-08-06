@@ -26,6 +26,8 @@ import Update_Owner from "../../Pages/FarmacyOwner/Profile/Update";
 import Profile_Rider from "../../Pages/Rider/Profile/Profile";
 import Update_Rider from "../../Pages/Rider/Profile/Update";
 import MainH from "../Daily-Tips/Main";
+import DailyTips from "../Daily-Tips/DailyTips";
+import CheckFarmacy from "../CheckFarmacy";
 
 const router = createBrowserRouter([
     {
@@ -43,6 +45,10 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: <Index />
+            },
+            {
+                path: "check-farmacy/:id",
+                element: <CheckFarmacy />
             },
             {
                 path: "profile",
@@ -67,6 +73,11 @@ const router = createBrowserRouter([
             {
                 path: "single-medicine-view/:id",
                 element: <Single />
+            }
+            ,
+            {
+                path: "health-tips",
+                element: <DailyTips />
             }
         ]
     },
@@ -189,10 +200,6 @@ const router = createBrowserRouter([
     {
         path: "role",
         element: <Navigate to="/register/role" />
-    },
-    {
-        path: "*",
-        element: <Navigate to="/" />
     }
 ]);
 

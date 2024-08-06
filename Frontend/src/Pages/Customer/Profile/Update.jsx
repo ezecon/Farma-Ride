@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input } from '@material-tailwind/react';
@@ -19,6 +19,8 @@ export default function Update_Customer() {
   const [upazilas, setUpazilas] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [code, setCode] = useState('');
+  const [profilePicture, setProfilePicture] = useState(null);
+  const[loading, setLoading]=useState(false);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -27,7 +29,7 @@ export default function Update_Customer() {
         navigate('/login');
       }
       try {
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://farma-ride-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
@@ -48,7 +50,7 @@ export default function Update_Customer() {
     if (userID) {
       const fetchUser = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
+          const response = await axios.get(`https://farma-ride-server.vercel.app/api/users/${userID}`);
           const userData = response.data;
           setUser(userData);
           setSelectedDivision(userData.division);
@@ -86,22 +88,48 @@ export default function Update_Customer() {
     setUpazilas(data[selectedDivision]?.[selected] || []);
   };
 
+  const handleFileChange = (event) => {
+    setProfilePicture(event.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     const updatedUser = { ...user, division: selectedDivision, district: selectedDistrict, upazilas: upazilas[0], zipCode: code };
-    try {
-      const response = await axios.put(`http://localhost:5000/api/users/profile/${userID}`, updatedUser);
-      if (response.status === 200) {
-        toast.success("Profile updated successfully");
-        navigate('/customer/profile'); 
-      } else {
-        toast.error("Failed to update profile");
-      }
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      toast.error("An error occurred while updating the profile");
+    const formData = new FormData();
+
+    for (const key in updatedUser) {
+        formData.append(key, updatedUser[key]);
     }
-  };
+
+    if (profilePicture) {
+        formData.append('photo', profilePicture);
+    }
+
+    try {
+        const response = await axios.put(`https://farma-ride-server.vercel.app/api/users/profile/${userID}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        if (response.status === 200) {
+            toast.success("Profile updated successfully");
+            navigate('/customer/profile');
+        } else {
+            toast.error("Failed to update profile");
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        toast.error("An error occurred while updating the profile");
+    }finally{
+      setLoading(false);
+    }
+};
+if(loading){
+  <>
+    <p className='text-center text-4xl'>Loading</p>
+  </>
+}
 
   return (
     <div className="p-6 max-w-4xl mx-auto bg-white shadow-xl rounded-lg border border-gray-200 transition-transform transform-gpu hover:scale-105">
@@ -133,13 +161,7 @@ export default function Update_Customer() {
               onChange={handleChange}
               required
             />
-            <Input
-              label="Role"
-              name="role"
-              value={user.role || ''}
-              onChange={handleChange}
-              required
-            />
+
             <select
               id="division"
               className="w-full p-3 border border-gray-300 rounded-lg bg-transparent text-black placeholder-gray-400"
@@ -191,6 +213,12 @@ export default function Update_Customer() {
               value={code}
               onChange={(e) => setCode(e.target.value)}
               required
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="w-full p-3 border border-gray-300 rounded-lg bg-transparent text-black placeholder-gray-400"
             />
             <Button color="black" type="submit" className="w-full mt-4">
               Update Profile

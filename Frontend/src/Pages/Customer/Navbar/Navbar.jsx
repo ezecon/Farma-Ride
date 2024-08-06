@@ -339,7 +339,6 @@ export default function Navbar() {
                 If you want to use the default address, no need to select anything
               </p>
             </div>
-            <p className="text-gray-600 mb-2 sm:mb-4">or,</p>
             <Button onClick={handleLiveLocation} className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
               Live
             </Button>

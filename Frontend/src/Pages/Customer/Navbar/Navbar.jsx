@@ -323,32 +323,32 @@ export default function Navbar() {
         </Fragment>
       </div>
       <div>
-      <Dialog open={openX} handler={handleOpenX} className="w-full max-w-lg mx-auto p-4 sm:p-6 md:p-8">
-        <DialogHeader className="text-[goldenrod] text-center text-2xl montserrat-alternates-light">
+      <Dialog open={openX} handler={handleOpenX} className="w-full max-w-lg mx-auto p-2 sm:p-4 md:p-6">
+        <DialogHeader className="text-[goldenrod] text-center text-xl sm:text-2xl montserrat-alternates-light">
           Order Confirmation
         </DialogHeader>
-        <DialogBody className="space-y-6">
-          <div className="border rounded-lg p-4 bg-white shadow-md">
-            <h1 className="text-xl font-bold mb-2">Address:</h1>
-            <p className="text-gray-600 mb-4">Want to use your default address?</p>
-            <div className="mb-5">
+        <DialogBody className="space-y-4 sm:space-y-6">
+          <div className="border rounded-lg p-3 sm:p-4 bg-white shadow-md">
+            <h1 className="text-lg sm:text-xl font-bold mb-2">Address:</h1>
+            <p className="text-gray-600 mb-2 sm:mb-4 text-sm">Want to use your default address?</p>
+            <div className="mb-4 sm:mb-5">
               {userInfo && userInfo.latitude && userInfo.longitude && (
-                <Map className="w-full h-64 rounded-lg" latitude={userInfo.latitude} longitude={userInfo.longitude} />
+                <Map className="w-full h-48 sm:h-64 rounded-lg" latitude={userInfo.latitude} longitude={userInfo.longitude} />
               )}
               <p className="montserrat-alternates-light text-sm">
                 If you want to use the default address, no need to select anything
               </p>
             </div>
-            <p className="text-gray-600 mb-4">or,</p>
+            <p className="text-gray-600 mb-2 sm:mb-4">or,</p>
             <Button onClick={handleLiveLocation} className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
               Live
             </Button>
           </div>
-          <div className="border rounded-lg p-4 bg-white shadow-md">
-            <h1 className="text-xl font-bold mb-2">Payment Method:</h1>
-            <div className="flex flex-col space-y-4 mb-6">
+          <div className="border rounded-lg p-3 sm:p-4 bg-white shadow-md">
+            <h1 className="text-lg sm:text-xl font-bold mb-2">Payment Method:</h1>
+            <div className="flex flex-col space-y-3 sm:space-y-4 mb-4 sm:mb-6">
               <Card className="cursor-pointer" onClick={() => handlePaymentMethodChange('bkash')}>
-                <CardBody className={`p-4 ${selectedMethod === 'bkash' ? 'border-2 border-blue-500' : ''}`}>
+                <CardBody className={`p-3 sm:p-4 ${selectedMethod === 'bkash' ? 'border-2 border-blue-500' : ''}`}>
                   <Radio
                     name="paymentMethod"
                     label="with Bkash"
@@ -358,7 +358,7 @@ export default function Navbar() {
                 </CardBody>
               </Card>
               <Card className="cursor-pointer" onClick={() => handlePaymentMethodChange('cashOnDel')}>
-                <CardBody className={`p-4 ${selectedMethod === 'cashOnDel' ? 'border-2 border-blue-500' : ''}`}>
+                <CardBody className={`p-3 sm:p-4 ${selectedMethod === 'cashOnDel' ? 'border-2 border-blue-500' : ''}`}>
                   <Radio
                     name="paymentMethod"
                     label="Cash On Delivery"
@@ -367,15 +367,13 @@ export default function Navbar() {
                   />
                 </CardBody>
               </Card>
-            </div>
-            {selectedMethod && (
-              <div className="flex justify-center">
-                <Button onClick={handleOrder} className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
-                  Confirm Order
-                </Button>
               </div>
-            )}
-          </div>
+              {selectedMethod && (
+                <div className="flex justify-center">
+                  <div onClick={handleOrder}><OrderButton /></div>
+                </div>
+              )}
+            </div>
         </DialogBody>
       </Dialog>
     </div>

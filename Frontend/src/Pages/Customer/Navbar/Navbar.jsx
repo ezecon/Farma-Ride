@@ -347,7 +347,7 @@ export default function Navbar() {
         </div>
         <div className="border rounded-lg p-4 bg-white shadow-md">
           <h1 className="text-xl font-bold mb-2">Payment Method:</h1>
-          <div className="space-y-4 mb-6">
+          <div className="flex space-y-4 mb-6">
             <Card className="cursor-pointer" onClick={() => handlePaymentMethodChange('bkash')}>
               <CardBody className={`p-4 ${selectedMethod === 'bkash' ? 'border-2 border-blue-500' : ''}`}>
                 <Radio

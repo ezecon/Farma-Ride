@@ -147,8 +147,19 @@ export default function Requests() {
               </div>
             ))}
             <p>Status: {purchase.status}</p>
-            {purchase.rider && <p>Rider ID: {purchase.rider} || <button  className='bg-black text-white font-bold p-2 rounded'>Check Info</button></p>}
-            {purchase.status === 'On the way' && <button  onClick={() => handleRec(purchase._id)} className='bg-black text-white font-bold p-2 rounded'>Received</button>}
+           {purchase.rider && (
+              <p>
+                Rider ID: {purchase.rider} || <a className='font-bold p-2 bg-black text-white rounded-md' href={`/customer/check-user/${purchase.rider}`}>Check User</a>
+              </p>
+            )}
+            {purchase.status === 'On the way' && (
+              <button
+                onClick={() => handleRec(purchase._id)}
+                className="bg-black text-white font-bold p-2 rounded"
+              >
+                Received
+              </button>
+            )}
 
           </div>
         ))}

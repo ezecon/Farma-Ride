@@ -28,6 +28,7 @@ import Update_Rider from "../../Pages/Rider/Profile/Update";
 import MainH from "../Daily-Tips/Main";
 import DailyTips from "../Daily-Tips/DailyTips";
 import CheckFarmacy from "../CheckFarmacy";
+import CheckUser from "../CheckUser";
 
 const router = createBrowserRouter([
     {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             {
                 path: "check-farmacy/:id",
                 element: <CheckFarmacy />
+            },
+            {
+                path: "check-user/:id",
+                element: <CheckUser />
             },
             {
                 path: "profile",

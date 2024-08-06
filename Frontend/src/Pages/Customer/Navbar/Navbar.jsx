@@ -340,7 +340,7 @@ export default function Navbar() {
               </p>
             </div>
             <p className="text-gray-600 mb-4">or,</p>
-            <Button onClick={handleLiveLocation} className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-full">
+            <Button onClick={handleLiveLocation} className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
               Live
             </Button>
           </div>
@@ -370,7 +370,9 @@ export default function Navbar() {
             </div>
             {selectedMethod && (
               <div className="flex justify-center">
-                <div onClick={handleOrder}><OrderButton /></div>
+                <Button onClick={handleOrder} className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
+                  Confirm Order
+                </Button>
               </div>
             )}
           </div>

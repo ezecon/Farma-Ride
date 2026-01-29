@@ -35,6 +35,15 @@ const purchaseSchema = new mongoose.Schema({
         type: Number,
         default: null,
     },
+    otp:{
+        type: Number,
+        required: true,
+    },
+    deliveryCharge:{
+        type: Number,
+        required: true,
+    },
+
     rider:{
         type: String,
         default: ''

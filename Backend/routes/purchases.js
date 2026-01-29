@@ -4,10 +4,10 @@ const Purchase = require('../models/Purchase.js');
 const router = express.Router();
 
 router.post('/buy', async (req, res) => {
-    const { buyerId, buyerPhone, products, quantity, price, latitude, longitude, buyType,} = req.body;
+    const { buyerId, buyerPhone, products, productsName, quantity, price, latitude, longitude, buyType,} = req.body;
 
     const newPurchase = new Purchase({
-        buyerId, buyerPhone, products, quantity, price, latitude, longitude, buyType, 
+        buyerId, buyerPhone, products, productsName, quantity, price, latitude, longitude, buyType, 
     });
 
     try { 

@@ -13,6 +13,10 @@ const purchaseSchema = new mongoose.Schema({
         type: [String], 
         required: true 
     }, 
+    productsName: { 
+        type: [String], 
+        required: true 
+    }, 
     latitude:{
         type: String,
     },
@@ -26,6 +30,10 @@ const purchaseSchema = new mongoose.Schema({
     status:{
         type: String,
         default: "Pending",
+    },
+    rating:{
+        type: Number,
+        default: null,
     },
     rider:{
         type: String,

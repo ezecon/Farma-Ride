@@ -174,6 +174,7 @@ export default function Navbar() {
         buyerId: userID,
         buyerPhone: userInfo.number,
         products: cartItems.map(item => item.productId),
+        productsName: cartItems.map(item => item.medicineName),
         quantity: cartItems.map(item => item.quantity),
         price: cartItems.map(item => item.price),
         latitude,

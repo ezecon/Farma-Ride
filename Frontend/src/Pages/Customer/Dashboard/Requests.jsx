@@ -138,7 +138,6 @@ export default function Requests() {
             {/* Group items by owner */}
             {Object.keys(groupItemsByOwner(purchase.products, purchase.quantity)).map((ownerId) => (
               <div key={ownerId} className="mb-3">
-                <h3 className="text-lg font-semibold">Owner: {owners[ownerId] || 'Unknown'}</h3>
                 <ul className="list-disc pl-5">
                   {Object.entries(groupItemsByOwner(purchase.products, purchase.quantity)[ownerId]).map(([medicineName, count]) => (
                     <li key={medicineName} className="text-black">{medicineName} (x{count})</li>

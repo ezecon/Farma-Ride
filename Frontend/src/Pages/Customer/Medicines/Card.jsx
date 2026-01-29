@@ -42,7 +42,6 @@ export default function PhotoCard({ data }) {
     try {
       const response = await axios.post('https://farma-ride-server.vercel.app/api/carts/add-cart', {
         buyerId: userID,
-        ownerId: owner,
         productId: _id,
         medicineName:medicineName,
         quantity: 1,

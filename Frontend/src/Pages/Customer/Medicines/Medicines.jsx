@@ -10,8 +10,6 @@ export default function Medicines() {
   const { token, removeToken } = useToken();
   const navigate = useNavigate();
   const [userID, setUserID] = useState(null);
-  const [ownerIDs, setOwnerIDs] = useState([]); // Changed to an array
-  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -38,69 +36,23 @@ export default function Medicines() {
     verifyToken();
   }, [token, navigate, removeToken]);
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (userID) {
-        try {
-          const response = await axios.get(`https://farma-ride-server.vercel.app/api/users/${userID}`);
-          if (response.status === 200) {
-            setUserInfo(response.data);
-          } else {
-            console.log(response.data);
-          }
-        } catch (err) {
-          console.error('Error fetching user info:', err);
-        }
-      }
-    };
 
-    fetchUserInfo();
-  }, [userID]);
-
-  useEffect(() => {
-    const OwnerFetch = async () => {
-      try {
-        const response = await axios.get('https://farma-ride-server.vercel.app/api/users/farmacy');
-        if (response.status === 200) {
-          console.log('Data fetched:', response.data); // Log fetched data
-          
-          // Assuming `userInfo` contains the `upazilas` field
-          const filteredData = response.data.filter(item => userInfo && item.upazilas === userInfo.upazilas);
-          const ownerIDs = filteredData.map(item => item._id); // Extract owner IDs
-          
-          console.log('Filtered data:', filteredData); // Log filtered data
-          setOwnerIDs(ownerIDs);
-        } else {
-          console.log("404 - Not Found");
-        }
-      } catch (err) {
-        console.log('Error:', err);
-      }
-    };
-
-    if (userInfo) {
-      OwnerFetch();
-    }
-  }, [userInfo]);
 
   useEffect(() => {
     const fetchMedicines = async () => {
       try {
         const response = await axios.get('https://farma-ride-server.vercel.app/api/medicines');
         if (response.status === 200) {
-          // Filter medicines where the owner is in the ownerIDs array
-          const filteredMedicines = response.data.filter(medicine => ownerIDs.includes(medicine.owner));
-          setData(filteredMedicines);
+         
+          setData(response.data);
         }
       } catch (err) {
         console.error('Error fetching medicines:', err);
       }
     };
 
-    if (ownerIDs.length > 0) {
       fetchMedicines();
-    }
-  }, [ownerIDs]);
+  }, []);
 
   return (
     <div className="flex flex-col justify-center items-center py-10 px-4 sm:px-6 lg:px-8">

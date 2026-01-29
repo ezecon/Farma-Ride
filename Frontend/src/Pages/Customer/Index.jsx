@@ -1,10 +1,10 @@
 import Count from "../../Components/Count/Count";
-import Advertise from "./Advertise/Advertise";
 import Farmacy from "./Farmacy/Farmacy";
 import Near from "./Farmacy/Near";
 import { Footer } from "./Footer/Footer";
 import HeroSection from "./HeroSection/HeroSection";
 import Medicines from "./Medicines/Medicines";
+import Riders from "./Riders/Riders";
 
 
 export default function Index() {
@@ -14,7 +14,7 @@ export default function Index() {
         <Count/>
         <Medicines/>
         <Near/>
-        <Advertise/>
+        <Riders/>
         <Farmacy/>
         <Footer/>
     </div>

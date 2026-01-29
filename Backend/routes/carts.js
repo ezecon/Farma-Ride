@@ -8,7 +8,6 @@ router.post('/add-cart', async (req, res) => {
 
   const newCart = new Cart({
     buyerId,
-    ownerId,
     productId,
     medicineName,
     quantity,

@@ -5,6 +5,7 @@ import GetApp from "../GetApp/GetApp";
 import HeroSection from "../HeroSection/HeroSection";
 import Navbar from "../Navbar/Navbar";
 import { Footer } from "../../Pages/FarmacyOwner/Footer/Footer";
+import Count from "../Count/Count";
 
 export default function Main() {
   const [isLoading, setIsLoading] = useState(true);
@@ -40,6 +41,7 @@ export default function Main() {
     <div>
       <Navbar />
       <HeroSection />
+      <Count/>
       <Business />
       <GetApp />
       <Footer/>

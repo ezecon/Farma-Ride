@@ -172,15 +172,12 @@ export default function Navbar() {
     try {
       const response = await axios.post(`https://farma-ride-server.vercel.app/api/purchases/buy`, {
         buyerId: userID,
-        sellerIds: cartItems.map(item => item.ownerId),
+        buyerPhone: userInfo.number,
         products: cartItems.map(item => item.productId),
         quantity: cartItems.map(item => item.quantity),
         price: cartItems.map(item => item.price),
         latitude,
         longitude,
-        division: userInfo.division,
-        district: userInfo.district,
-        upazilas:userInfo.upazilas,
         buyType: selectedMethod,
       });
       if (response.status === 200) {

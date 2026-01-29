@@ -205,11 +205,6 @@ export default function Requests() {
                       <CardBody>
                         <Typography className='flex flex-col justify-center'>
                           <h1 className='montserrat-alternates-bold text-xl text-[goldenrod] text-center'>Locations:</h1>
-                          {distinctOwners.map((ownerId) => (
-                            <Button onClick={() => handleOpenOwnerDialog(ownerId)} key={ownerId} className="mb-2">
-                              SEE OWNER {owners[ownerId] || 'Unknown'}
-                            </Button>
-                          ))}
                           <Button onClick={() => handleOpenCustomerDialog(purchase.buyerId)} >SEE CUSTOMER</Button>
                         </Typography>
                       </CardBody>

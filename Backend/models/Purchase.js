@@ -5,8 +5,8 @@ const purchaseSchema = new mongoose.Schema({
         type: String, 
         required: true 
     },
-    sellerIds: { 
-        type: [String], 
+    buyerPhone: { 
+        type: String, 
         required: true 
     },
     products: { 
@@ -27,19 +27,11 @@ const purchaseSchema = new mongoose.Schema({
         type: String,
         default: "Pending",
     },
-    district:{
-        type: String,
-        default: ''
-    },
     rider:{
         type: String,
         default: ''
     },
-    division:{
-        type: String,
-        default: ''
-    },
-    upazilas:{
+    hostPoint:{
         type: String,
         default: ''
     },
